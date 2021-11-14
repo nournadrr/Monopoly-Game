@@ -20,30 +20,38 @@ public class Player {
     private boolean isJail;
     private int balance;
     private boolean jailCard;
+    private int jailtime;
     
     public Player()
     {
         currentLocation=0;
-        properties=new Property[20];
+        properties=new Property[28];
         noOfPlayers++;
         isPlaying=true;
         balance=1500;
         numOfProperties=0;
         jailCard=false;
         isJail=false;
+        jailtime=0;
     }
     public void setCurrentLocation(int currentLocation)
     {
         this.currentLocation=currentLocation;
+        if(currentLocation==30)
+            isJail=true;
     }
     public void incrementCurrentLocation(int dice)
     {
-        currentLocation+=dice;
+        for(int i=0;i<dice;i++)
+        {
+            currentLocation=(currentLocation+1)%39;
+            if(currentLocation==0)
+                incrementBalance(250);
+        }
+        if(currentLocation==30)
+            isJail=true;
     }
-    public void decrementCurrentLocation()
-    {
-        currentLocation--;
-    }
+    
     public void setName(String name)
     {
         this.name=name;
@@ -54,15 +62,24 @@ public class Player {
     }
     public void setProperties(Property p)
     {
-        properties[numOfProperties]=new Property();
-        properties[numOfProperties]=p;
-        numOfProperties++;
+        properties[numOfProperties++]=p;
     }
-    public void deleteProperty(Property p)
+    public void incrementjailtime()
+    {
+        jailtime++;
+        if(jailtime==2)
+        {
+            jailtime=0;
+            isJail=false;
+        }
+        
+    }
+    /*
+    public void deleteProperty(Pr)
     {
         for(int i=0;i<numOfProperties;i++)
         {
-            if(properties[i].getId()==p.getId())
+            if(properties[i].getID()==id)
             {
                 for(int j=i;j<numOfProperties;j++)
                 {
@@ -73,6 +90,7 @@ public class Player {
             }
         }
     }
+*/
     public void decrementPlayers()
     {
         noOfPlayers--;
@@ -91,7 +109,30 @@ public class Player {
     }
     public void decrementBalance(int amount)
     {
+        
         balance-=amount;
+        if(balance<0)
+        {
+            while(balance<0)
+            {
+                mortage();
+            }
+        }
+        
+    }
+    public void mortage()
+    {
+        Property min=properties[0];
+        for(int i=0;i<numOfProperties;i++)
+        {
+            if(properties[i].getPrice()<min.getPrice())
+            {
+                min=properties[i];
+            }
+        }
+        min.setIsmortaged(true);
+        incrementBalance(min.getPrice());
+        
     }
     public void setJailCard(boolean card)
     {
@@ -113,7 +154,7 @@ public class Player {
     {
         return numOfProperties;
     }
-    public int getNoOfPlayers()
+    public static int getNoOfPlayers()
     {
         return noOfPlayers;
     }
@@ -129,21 +170,23 @@ public class Player {
     {
         return balance;
     }
-    public Property[] getProperties(Property p)
+    public Property getProperties(int i)
     {
-        return properties;
+        return properties[i];
     }
-    public boolean findProperty(Property p)
+    /*
+    public boolean findProperty(int id)
     {
         for(int i=0;i<numOfProperties;i++)
         {
-            if(properties[i].getId()==p.getId())
+            if(properties[i].getID()==id)
             {
                 return true;
             }
         }
         return false;
     }
+*/
     public boolean getJailCard()
     {
         return jailCard;
