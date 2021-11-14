@@ -10,6 +10,7 @@ public class Chances {
         message[0]=new String("go to jail");
         message[1]=new String("take 100$");
         message[2]=new String("pay 150$");
+
     }
 
     public int getId() {
@@ -43,6 +44,7 @@ public class Chances {
         {
             System.out.println("pay 150$");
             p.decrementBalance(150);
+
         }
     }
     

@@ -75,6 +75,7 @@ public class MonopolyGame {
         
         
         Game game=new Game();
+
         Player[] p=new Player[3];
         p[0]=new Player();
         p[1]=new Player();
@@ -109,6 +110,7 @@ public class MonopolyGame {
                                 int ownerid=c[j].getOwnerid();
                                 p[ownerid].incrementBalance(c[j].getRent());
                             }
+
                         }
                         else
                         {
@@ -134,6 +136,7 @@ public class MonopolyGame {
                 
                 
                     if(p[i].getCurrentLocation()==ta[0].getId()) //taxes
+
                     {
                         p[i].decrementBalance(ta[0].getPayment());
                     }

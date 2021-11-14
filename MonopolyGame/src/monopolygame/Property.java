@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
+
 /**
  *
  * @author Dell
@@ -33,7 +34,7 @@ private int ID;
         this.isbought = false;
         this.rent = rent;
     }
-    
+
     public int getID() {
         return ID;
     }
@@ -156,6 +157,7 @@ private int ID;
                   out.print(((waterandelec)s[i]).getID()+" "+((waterandelec)s[i]).getName()+" "+((waterandelec)s[i]).getPrice());
               }
           }
+
 
  
 }
