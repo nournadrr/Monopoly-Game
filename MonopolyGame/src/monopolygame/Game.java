@@ -36,5 +36,22 @@ public class Game {
             }
         }
     }
-    
+    /*
+    public Player[] deletePlayer(Player[] players,Player p)
+    {
+        for(int i=0;i<Player.getNoOfPlayers();i++)
+        {
+            if(p.getId()==players[i].getId())
+            {
+                for(int j=i;j<Player.getNoOfPlayers()-1;j++)
+                {
+                    players[j]=players[j+1];
+                }
+                Player.decrementPlayers();
+                break;
+            }
+        }
+        return players;
+    }
+    */
 }

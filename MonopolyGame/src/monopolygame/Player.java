@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 package monopolygame;
-
+import java.util.*;
 /**
  *
  * @author Dell
  */
 public class Player {
+    Game g;
+    Scanner in=new Scanner(System.in);
     private int currentLocation;
     private String name;
     private int id;
@@ -91,7 +93,7 @@ public class Player {
         }
     }
 */
-    public void decrementPlayers()
+    public static void decrementPlayers()
     {
         noOfPlayers--;
     }
@@ -115,24 +117,40 @@ public class Player {
         {
             while(balance<0)
             {
-                mortage();
+                boolean choice=false;
+                for(int i=0;i<numOfProperties;i++)
+                {
+                    if(properties[i].isIsmortaged()==false)
+                    {
+                        choice=true;
+                        break;
+                    }
+                }
+                if(choice)
+                {
+                    mortage();
+                }
+                else
+                {
+                    isPlaying=false;
+                    noOfPlayers--;
+                    break;
+                }
             }
         }
         
     }
     public void mortage()
     {
-        Property min=properties[0];
-        for(int i=0;i<numOfProperties;i++)
+        int numberOfProperty=in.nextInt();
+        if(properties[numberOfProperty].getOwnerid()==this.id)
         {
-            if(properties[i].getPrice()<min.getPrice())
+            if(properties[numberOfProperty].isIsmortaged()==false)
             {
-                min=properties[i];
+                properties[numberOfProperty].setIsmortaged(true);
+                incrementBalance(properties[numberOfProperty].getPrice()); 
             }
         }
-        min.setIsmortaged(true);
-        incrementBalance(min.getPrice());
-        
     }
     public void setJailCard(boolean card)
     {

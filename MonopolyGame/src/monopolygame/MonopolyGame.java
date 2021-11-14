@@ -83,10 +83,14 @@ public class MonopolyGame {
         
         while(Player.getNoOfPlayers()>1)
         {
-            for(int i=0;i<Player.getNoOfPlayers();i++)
+            for(int i=0;i<p.length;i++)
             {
+                if(p[i].getIsPlaying()==false)
+                {
+                    continue;
+                }
                 //if you want to buy a mortaged property
-                //game.buyMortage(p[i]);
+                game.buyMortage(p[i]);
                 
                 boolean isit=false;
                 dice =(int)(Math.random()*12+1);
