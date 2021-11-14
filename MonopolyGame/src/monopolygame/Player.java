@@ -16,6 +16,7 @@ public class Player {
     private String name;
     private int id;
     private Property[] properties;
+
     private int numOfProperties;
     private static int noOfPlayers=0;
     private boolean isPlaying;
@@ -28,6 +29,7 @@ public class Player {
     {
         currentLocation=0;
         properties=new Property[28];
+
         noOfPlayers++;
         isPlaying=true;
         balance=1500;
@@ -53,7 +55,7 @@ public class Player {
         if(currentLocation==30)
             isJail=true;
     }
-    
+
     public void setName(String name)
     {
         this.name=name;
@@ -65,6 +67,7 @@ public class Player {
     public void setProperties(Property p)
     {
         properties[numOfProperties++]=p;
+
     }
     public void incrementjailtime()
     {
@@ -76,24 +79,8 @@ public class Player {
         }
         
     }
-    /*
-    public void deleteProperty(Pr)
-    {
-        for(int i=0;i<numOfProperties;i++)
-        {
-            if(properties[i].getID()==id)
-            {
-                for(int j=i;j<numOfProperties;j++)
-                {
-                    properties[j]=properties[j+1];
-                }
-                numOfProperties--;
-                break;
-            }
-        }
-    }
-*/
-    public static void decrementPlayers()
+
+    public void decrementPlayers()
     {
         noOfPlayers--;
     }
@@ -192,12 +179,14 @@ public class Player {
     {
         return properties[i];
     }
+  
     /*
     public boolean findProperty(int id)
     {
         for(int i=0;i<numOfProperties;i++)
         {
             if(properties[i].getID()==id)
+
             {
                 return true;
             }
@@ -205,6 +194,7 @@ public class Player {
         return false;
     }
 */
+
     public boolean getJailCard()
     {
         return jailCard;
