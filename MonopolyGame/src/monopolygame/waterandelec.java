@@ -1,13 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package monopolygame;
-
-/**
- *
- * @author youssef m pc
- */
 public class waterandelec extends Property {
     private int rent;
 
@@ -15,13 +6,17 @@ public class waterandelec extends Property {
         super(ID, name,"", price,0);
     }
 
-    public int getRent() {
-        return rent;
+    public  int getRent(int dice,Property[] c) {
+        
+        if(c[26].getOwnerid()==c[27].getOwnerid())
+            return 10*dice;
+        else
+            return 4*dice;
     }
 
-    public void setRent(int dice) {
-        this.rent = dice*4;
-    }
+//    public void setRent(int dice) {
+//        this.rent = dice*4;
+//    }
     
    
     

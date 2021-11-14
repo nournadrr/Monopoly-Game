@@ -51,8 +51,8 @@ public class Cities extends Property{
         return housecounter;
     }
 
-    public void setHousecounter(int housecounter) {
-        this.housecounter = housecounter;
+    public void setHousecounter() {
+        this.housecounter ++;
     }
 
     
@@ -97,13 +97,15 @@ public class Cities extends Property{
     }
 public void rent(){
  
-    switch(housecounter){
+    switch(housecounter)
+    {
         case 0:super.getRent();break;
-        case 1:  getRenthouse()  ; break;
-        case 2:    getRent2()    ;break;
+        case 1:getRenthouse();break;
+        case 2:getRent2();break;
         case 3:getRent3();break;
         case 4:getRent4();break;
-           }
+        case 5:getRentofhotel();break;
+    }
    
         
     }
