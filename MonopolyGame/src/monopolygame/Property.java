@@ -129,12 +129,20 @@ private int ID;
     }
           public static void writetofile(Property[] s) throws FileNotFoundException 
           {
-              PrintWriter out=new PrintWriter("Properties.txt");
+              String name="Properties.txt";
+              File file=new File(name);
+              PrintWriter out=new PrintWriter(file);
               /* int Cost_Of_House, int rent_with_1_house, int rent_with_2_house, 
             int rent_with_3_house, int rent_with_4_house, int rent_with_Hotel,
             int id, String name, String colour, int price, int rent */
               for(int i=0;i<22;i++)
               {
+//                  out.println(((Cities)s[i]).getHousesprice()+" "+((Cities)s[i]).getRenthouse()+" "
+//                  +((Cities)s[i]).getRent2()+" "+((Cities)s[i]).getRent3()+" "+((Cities)s[i]).getRent4()
+//                          +" "+((Cities)s[i]).getRentofhotel()+" "+((Cities)s[i]).getID()+" "
+//                  +((Cities)s[i]).getName()+" "+((Cities)s[i]).getColor()+" "+((Cities)s[i]).getPrice()+" "
+//                  +((Cities)s[i]).getRent()+" ");
+                  
                   out.print(((Cities)s[i]).getHousesprice()+" ");
                   out.print(((Cities)s[i]).getRenthouse()+" ");
                   out.print(((Cities)s[i]).getRent2()+" ");
@@ -145,17 +153,18 @@ private int ID;
                   out.print(((Cities)s[i]).getName()+" ");
                   out.print(((Cities)s[i]).getColor()+" ");
                   out.print(((Cities)s[i]).getPrice()+" ");
-                  out.print(((Cities)s[i]).getRent()+" ");
+                  out.println(((Cities)s[i]).getRent()+" ");
               }
               for(int i=22;i<26;i++)
               {
-                  out.print(((Train)s[i]).getID()+" "+((Train)s[i]).getName()+" "+
+                  out.println(((Train)s[i]).getID()+" "+((Train)s[i]).getName()+" "+
                           ((Train)s[i]).getColor()+" "+((Train)s[i]).getPrice()+" "+((Train)s[i]).getRent());
               }
               for(int i=26;i<28;i++)
               {
-                  out.print(((waterandelec)s[i]).getID()+" "+((waterandelec)s[i]).getName()+" "+((waterandelec)s[i]).getPrice());
+                  out.println(((waterandelec)s[i]).getID()+" "+((waterandelec)s[i]).getName()+" "+((waterandelec)s[i]).getPrice());
               }
+              out.close();
           }
 
 

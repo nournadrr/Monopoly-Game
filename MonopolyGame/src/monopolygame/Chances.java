@@ -4,8 +4,8 @@ public class Chances {
     private static String []message;
     
 
-    public Chances() {
-        //this.id = id;
+    public Chances(int id) {
+        this.id = id;
         message=new String[3];
         message[0]=new String("go to jail");
         message[1]=new String("take 100$");
