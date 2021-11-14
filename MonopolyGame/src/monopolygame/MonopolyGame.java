@@ -7,7 +7,7 @@ public class MonopolyGame {
         
         
         
-        
+        Chances chance=new Chances();
         Property[] c=new Property[28];
         
         
@@ -74,6 +74,8 @@ public class MonopolyGame {
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
+        Game game=new Game();
+
         Player[] p=new Player[3];
         p[0]=new Player();
         p[1]=new Player();
@@ -84,8 +86,11 @@ public class MonopolyGame {
         {
             for(int i=0;i<Player.getNoOfPlayers();i++)
             {
+                //if you want to buy a mortaged property
+                //game.buyMortage(p[i]);
+                
                 boolean isit=false;
-                dice =(int)(Math.random()*12);
+                dice =(int)(Math.random()*12+1);
                 if(p[i].getIsJail())
                 {
                     p[i].incrementjailtime();
@@ -100,8 +105,12 @@ public class MonopolyGame {
                         if(c[j].Isbought())
                         {
                             p[i].decrementBalance(c[j].getRent());
-                            int ownerid=c[j].getOwnerid();
-                            p[ownerid].incrementBalance(c[j].getRent());
+                            if(!c[j].isIsmortaged())
+                            {
+                                int ownerid=c[j].getOwnerid();
+                                p[ownerid].incrementBalance(c[j].getRent());
+                            }
+
                         }
                         else
                         {
@@ -110,7 +119,7 @@ public class MonopolyGame {
                             {
                                 p[i].decrementBalance(c[j].getPrice());
                                 c[j].setOwnerid(i);
-                                p[i].setProperties(j);
+                                p[i].setProperties(c[j]);
                             }
                         }
                     }
@@ -119,11 +128,15 @@ public class MonopolyGame {
                 {
                     if(p[i].getCurrentLocation()==2||p[i].getCurrentLocation()==7||p[i].getCurrentLocation()==17||p[i].getCurrentLocation()==22||
                             p[i].getCurrentLocation()==33||p[i].getCurrentLocation()==36)
+                    {
+                        int choice=(int)(Math.random()*3);
+                        Chances.todo(choice, p[i]);
+                    }
                         
-                }
-                if(isit!=true) //taxes
-                {
-                    if(p[i].getCurrentLocation()==ta[0].getId())
+                
+                
+                    if(p[i].getCurrentLocation()==ta[0].getId()) //taxes
+
                     {
                         p[i].decrementBalance(ta[0].getPayment());
                     }

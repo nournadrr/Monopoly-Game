@@ -13,7 +13,8 @@ public class Player {
     private int currentLocation;
     private String name;
     private int id;
-    private int[] properties;
+    private Property[] properties;
+
     private int numOfProperties;
     private static int noOfPlayers=0;
     private boolean isPlaying;
@@ -25,7 +26,8 @@ public class Player {
     public Player()
     {
         currentLocation=0;
-        properties=new int[20];
+        properties=new Property[28];
+
         noOfPlayers++;
         isPlaying=true;
         balance=1500;
@@ -51,10 +53,7 @@ public class Player {
         if(currentLocation==30)
             isJail=true;
     }
-    public void decrementCurrentLocation()
-    {
-        currentLocation--;
-    }
+
     public void setName(String name)
     {
         this.name=name;
@@ -63,10 +62,10 @@ public class Player {
     {
         this.id=id;
     }
-    public void setProperties(int id)
+    public void setProperties(Property p)
     {
-        properties[numOfProperties]=id;
-        numOfProperties++;
+        properties[numOfProperties++]=p;
+
     }
     public void incrementjailtime()
     {
@@ -77,22 +76,6 @@ public class Player {
             isJail=false;
         }
         
-    }
-    
-    public void deleteProperty(int id)
-    {
-        for(int i=0;i<numOfProperties;i++)
-        {
-            if(properties[i]==id)
-            {
-                for(int j=i;j<numOfProperties;j++)
-                {
-                    properties[j]=properties[j+1];
-                }
-                numOfProperties--;
-                break;
-            }
-        }
     }
     public void decrementPlayers()
     {
@@ -112,7 +95,30 @@ public class Player {
     }
     public void decrementBalance(int amount)
     {
+        
         balance-=amount;
+        if(balance<0)
+        {
+            while(balance<0)
+            {
+                mortage();
+            }
+        }
+        
+    }
+    public void mortage()
+    {
+        Property min=properties[0];
+        for(int i=0;i<numOfProperties;i++)
+        {
+            if(properties[i].getPrice()<min.getPrice())
+            {
+                min=properties[i];
+            }
+        }
+        min.setIsmortaged(true);
+        incrementBalance(min.getPrice());
+        
     }
     public void setJailCard(boolean card)
     {
@@ -150,21 +156,26 @@ public class Player {
     {
         return balance;
     }
-    public int[] getProperties()
+    public Property getProperties(int i)
     {
-        return properties;
+        return properties[i];
     }
+  
+    /*
     public boolean findProperty(int id)
     {
         for(int i=0;i<numOfProperties;i++)
         {
-            if(properties[i]==id)
+            if(properties[i].getID()==id)
+
             {
                 return true;
             }
         }
         return false;
     }
+*/
+
     public boolean getJailCard()
     {
         return jailCard;
