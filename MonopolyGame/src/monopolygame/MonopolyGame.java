@@ -80,13 +80,13 @@ public class MonopolyGame {
         p[2]=new Player();
         int dice;
         
-        while(Player.getNoOfPlayers()>1)
+        while(Player.getNoOfPlayers()>1) //Active players
         {
-            for(int i=0;i<Player.getNoOfPlayers();i++)
+            for(int i=0;i<Player.getNoOfPlayers();i++) // each players turn
             {
                 boolean isit=false;
                 dice =(int)(Math.random()*12);
-                if(p[i].getIsJail())
+                if(p[i].getIsJail())   // check if player is jailed
                 {
                     p[i].incrementjailtime();
                     continue;
@@ -94,10 +94,10 @@ public class MonopolyGame {
                 p[i].setCurrentLocation(dice);
                 for(int j=1;j<c.length;j++)  //Properties
                 {
-                    if(p[i].getCurrentLocation()==c[j].getID())
+                    if(p[i].getCurrentLocation()==c[j].getID())// loop for properties
                     {
                         isit=true;
-                        if(c[j].Isbought())
+                        if(c[j].Isbought())  //check if property is owned by other players
                         {
                             p[i].decrementBalance(c[j].getRent());
                             int ownerid=c[j].getOwnerid();
@@ -121,7 +121,7 @@ public class MonopolyGame {
                             p[i].getCurrentLocation()==33||p[i].getCurrentLocation()==36)
                         
                 }
-                if(isit!=true) //taxes
+                if(isit!=true) //Pay taxes
                 {
                     if(p[i].getCurrentLocation()==ta[0].getId())
                     {

@@ -25,7 +25,7 @@ public class Player {
     public Player()
     {
         currentLocation=0;
-        properties=new int[20];
+        properties=new int[28];
         noOfPlayers++;
         isPlaying=true;
         balance=1500;
@@ -50,10 +50,6 @@ public class Player {
         }
         if(currentLocation==30)
             isJail=true;
-    }
-    public void decrementCurrentLocation()
-    {
-        currentLocation--;
     }
     public void setName(String name)
     {
@@ -169,4 +165,6 @@ public class Player {
     {
         return jailCard;
     }
+    
+    
 }

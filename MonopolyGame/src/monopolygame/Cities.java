@@ -10,7 +10,7 @@ package monopolygame;
  * @author Dell
  */
 public class Cities extends Property{
-    private int housesprice;
+ private int housesprice;
  private int housecounter;
  private int renthouse;
  private int rent2;
@@ -96,11 +96,11 @@ public class Cities extends Property{
         this.rentofhotel = rentofhotel;
     }
 public void rent(){
- 
+    
     switch(housecounter){
         case 0:super.getRent();break;
-        case 1:  getRenthouse()  ; break;
-        case 2:    getRent2()    ;break;
+        case 1:getRenthouse();break;
+        case 2:getRent2();break;
         case 3:getRent3();break;
         case 4:getRent4();break;
            }
