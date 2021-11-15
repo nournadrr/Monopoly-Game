@@ -12,7 +12,7 @@ public class Game {
     {
         System.out.println("do you want to buy a mortaged property?");
         String choice=in.next();
-        if(choice.equals("yes"))
+        if(choice.equalsIgnoreCase("yes"))
         {
             for(int i=0;i<p.getNumOfProperties();i++)
             {
@@ -54,6 +54,8 @@ public class Game {
                 ((Cities)pr[choice]).setHousecounter();
                 pl.decrementBalance(((Cities)pr[choice]).getHousesprice());
             }
+            else
+                System.out.println("u can't build");
         }
         
         else
