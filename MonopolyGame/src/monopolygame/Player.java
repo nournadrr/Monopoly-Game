@@ -80,7 +80,7 @@ public class Player {
         
     }
 
-    public void decrementPlayers()
+    public static void decrementPlayers()
     {
         noOfPlayers--;
     }
@@ -102,6 +102,7 @@ public class Player {
         balance-=amount;
         if(balance<0)
         {
+            System.out.println("u don't have enough money you should pay more "+balance);
             while(balance<0)
             {
                 boolean choice=false;
@@ -129,14 +130,17 @@ public class Player {
     }
     public void mortage()
     {
-        int numberOfProperty=in.nextInt();
-        if(properties[numberOfProperty].getOwnerid()==this.id)
+        System.out.println("choose which property u want to mortgage\n");
+        int prid=in.nextInt();  // id of chosen property
+        if(properties[prid].getOwnerid()==this.id)
         {
-            if(properties[numberOfProperty].isIsmortaged()==false)
+            if(properties[prid].isIsmortaged()==false)
             {
-                properties[numberOfProperty].setIsmortaged(true);
-                incrementBalance(properties[numberOfProperty].getPrice()); 
+                properties[prid].setIsmortaged(true);
+                incrementBalance(properties[prid].getPrice()); 
             }
+            else 
+                System.out.println("it is already mortgaged\n");
         }
     }
     public void setJailCard(boolean card)
