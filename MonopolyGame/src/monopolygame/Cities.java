@@ -37,6 +37,19 @@ public class Cities extends Property{
         this.rentofhotel = rentofhotel;
     }
 
+    public Cities(int housesprice,  int renthouse, int rent2, 
+            int rent3, int rent4, int rentofhotel, 
+            int ID, String name, String colour, int price, int rent,boolean ismortaged,boolean isbought,int ownerid,int housecounter)
+    {
+        super(ID, name,colour, price, rent,ismortaged,isbought,ownerid);
+        this.housesprice = housesprice;
+        this.housecounter = housecounter;
+        this.renthouse = renthouse;
+        this.rent2 = rent2;
+        this.rent3 = rent3;
+        this.rent4 = rent4;
+        this.rentofhotel = rentofhotel;
+    }
  
 
     public int getHousesprice() {

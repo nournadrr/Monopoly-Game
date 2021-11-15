@@ -6,6 +6,10 @@ public class waterandelec extends Property {
         super(ID, name,"", price,0);
     }
 
+    public waterandelec(int ID, String name, int price,boolean ismortaged,boolean isbought,int ownerid) {
+        super(ID, name,"", price,0,ismortaged,isbought,ownerid);
+    }
+    
     public  int getRent(int dice,Property[] c) {
         
         if(c[26].getOwnerid()==c[27].getOwnerid())

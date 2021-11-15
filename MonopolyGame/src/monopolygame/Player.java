@@ -10,7 +10,6 @@ import java.util.*;
  * @author Dell
  */
 public class Player {
-    Game g;
     Scanner in=new Scanner(System.in);
     private int currentLocation;
     private String name;
@@ -36,6 +35,22 @@ public class Player {
         numOfProperties=0;
         jailCard=false;
         isJail=false;
+        jailtime=0;
+    }
+    //(p[i].getId()+"  "+p[i].getName()+"  "+p[i].getBalance()+"  "+p[i].getCurrentLocation()+"  "+p[i].getIsJail()+"  "+
+                    //p[i].getIsPlaying()+"  "+p[i].getJailCard()+"  "+p[i].getNumOfProperties())
+    public Player(int id,String name,int balance,int currentLocation,boolean isJail,boolean isPlaying,boolean jailCard,int numOfProperties,int jailtime)
+    {
+        this.currentLocation=currentLocation;
+        this.properties=new Property[28];
+        this.id=id;
+        this.name=name;
+        noOfPlayers++;
+        this.isPlaying=isPlaying;
+        this.balance=balance;
+        this.numOfProperties=numOfProperties;
+        this.jailCard=jailCard;
+        this.isJail=isJail;
         jailtime=0;
     }
     public void setCurrentLocation(int currentLocation)
@@ -180,6 +195,10 @@ public class Player {
         return properties[i];
     }
   
+    public int getjailtime()
+    {
+        return jailtime;
+    }
     /*
     public boolean findProperty(int id)
     {

@@ -35,6 +35,22 @@ private int ID;
         this.rent = rent;
     }
 
+    public Property(int ID, String name, String colour, int price,int rent,boolean ismortaged,boolean isbought,int ownerid)
+    {
+        this.ID = ID;
+        this.name = name;
+        this.colour=colour;
+        this.price = price;
+        this.ismortaged = ismortaged;
+        this.isbought = isbought;
+        this.rent = rent;
+        this.ownerid=ownerid;
+    }
+    
+    {
+        
+    }
+    
     public int getID() {
         return ID;
     }
