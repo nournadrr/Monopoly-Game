@@ -8,6 +8,10 @@ public class Train extends Property{
     }
 
 
+    public Train(int ID, String name,String colour, int price, int rent,boolean ismortaged,boolean isbought,int ownerid) {
+        super(ID, name, colour, price, rent,ismortaged,isbought,ownerid);
+
+    }
     
    
     
