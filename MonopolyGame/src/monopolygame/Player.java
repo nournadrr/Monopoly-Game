@@ -37,8 +37,6 @@ public class Player {
         isJail=false;
         jailtime=0;
     }
-    //(p[i].getId()+"  "+p[i].getName()+"  "+p[i].getBalance()+"  "+p[i].getCurrentLocation()+"  "+p[i].getIsJail()+"  "+
-                    //p[i].getIsPlaying()+"  "+p[i].getJailCard()+"  "+p[i].getNumOfProperties())
     public Player(int id,String name,int balance,int currentLocation,boolean isJail,boolean isPlaying,boolean jailCard,int numOfProperties,int jailtime)
     {
         this.currentLocation=currentLocation;
@@ -83,6 +81,10 @@ public class Player {
     {
         properties[numOfProperties++]=p;
 
+    }
+    public void decrementproperties()
+    {
+        numOfProperties--;
     }
     public void incrementjailtime()
     {
@@ -203,20 +205,6 @@ public class Player {
     {
         return jailtime;
     }
-    /*
-    public boolean findProperty(int id)
-    {
-        for(int i=0;i<numOfProperties;i++)
-        {
-            if(properties[i].getID()==id)
-
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-*/
 
     public boolean getJailCard()
     {

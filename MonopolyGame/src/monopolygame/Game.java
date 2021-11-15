@@ -180,25 +180,12 @@ public class Game {
                     p[i].getIsPlaying()+"  "+p[i].getJailCard()+"  "+p[i].getNumOfProperties());
             for(int j=0;j<p[i].getNumOfProperties();j++)
             {
-                out.print(p[i].getProperties(j).getID()+"  "+p[i].getProperties(j).getName()+"  "+p[i].getProperties(j).getColor()
-                        +"  "+p[i].getProperties(j).getPrice()+"  "+p[i].getProperties(j).getOwnerid()+"  "+p[i].getProperties(j).getRent()+"  "
-                +p[i].getProperties(j));
+                out.print(p[i].getProperties(j).getID());
             }
             out.println();
         }
-        /*
-        //save properties data
-        for(int i=0;i<c.length;i++)
-        {
-            out.print(c[i].getID()+"  "+c[i].getName()+"  "+c[i].getColor()+"  "+c[i].getOwnerid()+"  "+c[i].getPrice()+"  "+c[i].getRent());
-            out.println();
-        }
-*/
         out.close();
     }
-    //Cities(int housesprice,  int renthouse, int rent2, 
-            //int rent3, int rent4, int rentofhotel, 
-           // int ID, String name, String colour, int price, int rent,boolean ismortaged,boolean isbought,int ownerid,int housecounter)
     public static void loadProperty(Property c[]) throws FileNotFoundException
     {
         String name="saveProperty.txt";
@@ -211,25 +198,23 @@ public class Game {
                     input.next(),input.nextInt(),input.nextInt(),input.nextBoolean(),input.nextBoolean()
                     ,input.nextInt(),input.nextInt());
         }
-        //Train(int ID, String name,String colour, int price, int rent,boolean ismortaged,boolean isbought,int ownerid)
         for(int i=22;i<26;i++)
         {
             c[i]=new Train(input.nextInt(),input.next(),input.next(),input.nextInt(),input.nextInt(),input.nextBoolean()
                     ,input.nextBoolean(),input.nextInt());
         }
-        //waterandelec(int ID, String name, int price,boolean ismortaged,boolean isbought,int ownerid)
+
         for(int i=26;i<28;i++)
             c[i]=new waterandelec(input.nextInt(),input.next(),input.nextInt(),input.nextBoolean(),input.nextBoolean(),input.nextInt());
         
         input.close();
     }
     
-    public static void loadPlayer(Player[] p) throws FileNotFoundException
+    public static void loadPlayer(Player[] p,Property[] c) throws FileNotFoundException
     {
         String name="savePlayer.txt";
         File file=new File(name);
         Scanner input=new Scanner(file);
-        //public Player(int id,String name,int balance,int currentLocation,boolean isJail,boolean isPlaying,boolean jailCard,int numOfProperties)
         for(int i=0;i<p.length;i++)
         {
             p[i]=new Player(input.nextInt(),input.next(),input.nextInt(),input.nextInt(),input.nextBoolean(),input.nextBoolean(),input.nextBoolean()
@@ -237,10 +222,15 @@ public class Game {
             //properties
             for(int j=0;j<p[i].getNumOfProperties();j++)
             {
-                //(p[i].getProperties(j).getID()+"  "+p[i].getProperties(j).getName()+"  "+p[i].getProperties(j).getColor()
-                        //+"  "+p[i].getProperties(j).getPrice()+"  "+p[i].getProperties(j).getOwnerid()+"  "+p[i].getProperties(j).getRent())
-                
-                
+                int x=input.nextInt();
+                for(int z=0;z<c.length;z++)
+                {
+                    if(x==c[z].getID())
+                    {
+                        p[i].setProperties(c[z]);
+                        p[i].decrementproperties();
+                    }
+                }
             }
         }
         
@@ -251,9 +241,6 @@ public class Game {
         String name="saveProperty.txt";
         File file=new File(name);
         PrintWriter out=new PrintWriter(file);
-        //Cities(int housesprice,  int renthouse, int rent2, 
-            //int rent3, int rent4, int rentofhotel, 
-           // int ID, String name, String colour, int price, int rent,boolean ismortaged,boolean isbought,int ownerid,int housecounter)
         for(int i=0;i<22;i++)
         {
             out.print(((Cities)c[i]).getHousesprice()+"  "+((Cities)c[i]).getRenthouse()+"  "+((Cities)c[i]).getRent2()+"  "+
@@ -263,7 +250,6 @@ public class Game {
             
             out.println();
         }
-        //Train(int ID, String name,String colour, int price, int rent,boolean ismortaged,boolean isbought,int ownerid)
         for(int i=22;i<26;i++)
         {
             out.print(((Train)c[i]).getID()+"  "+((Train)c[i]).getName()+"  "+((Train)c[i]).getColor()+"  "+((Train)c[i]).getPrice()
@@ -271,7 +257,6 @@ public class Game {
             
             out.println();
         }
-        //waterandelec(int ID, String name, int price,boolean ismortaged,boolean isbought,int ownerid)
         for(int i=26;i<28;i++)
         {
             out.print(((waterandelec)c[i]).getID()+"  "+((waterandelec)c[i]).getName()+"  "+((waterandelec)c[i]).getPrice()

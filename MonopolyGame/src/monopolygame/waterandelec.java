@@ -18,9 +18,7 @@ public class waterandelec extends Property {
             return 4*dice;
     }
 
-//    public void setRent(int dice) {
-//        this.rent = dice*4;
-//    }
+
     
    
     

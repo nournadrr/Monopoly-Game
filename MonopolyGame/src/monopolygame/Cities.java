@@ -18,10 +18,7 @@ public class Cities extends Property{
  private int rent4;
  private int rentofhotel;
 
- 
-/* int Cost_Of_House, int rent_with_1_house, int rent_with_2_house, 
-            int rent_with_3_house, int rent_with_4_house, int rent_with_Hotel,
-            int id, String name, String colour, int price, int rent */ 
+
  
  
     public Cities(int housesprice,  int renthouse, int rent2, 

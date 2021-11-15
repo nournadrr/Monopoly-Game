@@ -6,7 +6,31 @@ public class MonopolyGame {
     
     public static void main(String[] args) throws FileNotFoundException {
                 Scanner sc=new Scanner(System.in);
+                Game game=new Game();
+                Player[] p=new Player[3];
+                Property[] c=new Property[28];
 
+                System.out.println("enter 1 for new game or 2 to load a game");
+                int choose =sc.nextInt();
+                if(choose==2)
+                {
+                    Game.loadProperty(c);
+                    Game.loadPlayer(p,c);
+                    
+                }
+                else
+                {
+                    Property.readFromfile(c);
+                    p[0]=new Player();
+                    p[0].setName("abdo");
+                    p[0].setId(1);
+                    p[1]=new Player();
+                    p[1].setName("nour");
+                    p[1].setId(2);
+                    p[2]=new Player();
+                    p[2].setName("youssef");
+                    p[2].setId(3);
+                }
         Chances []chance=new Chances[6];
         chance[0]=new Chances(2);
         chance[1]=new Chances(7);
@@ -16,20 +40,11 @@ public class MonopolyGame {
         chance[5]=new Chances(36);
         
   
-        Property[] c=new Property[28];
-        Property.readFromfile(c);
-        Game game=new Game();
+        
+        
 
-        Player[] p=new Player[3];
-        p[0]=new Player();
-        p[0].setName("abdo");
-        p[0].setId(1);
-        p[1]=new Player();
-        p[1].setName("nour");
-        p[1].setId(2);
-        p[2]=new Player();
-        p[2].setName("youssef");
-        p[2].setId(3);
+        
+        
         int dice=0,turnchoice, counter=0;
         
         while(Player.getNoOfPlayers()>1)
@@ -64,6 +79,8 @@ public class MonopolyGame {
                             Player.decrementPlayers();
                             break;
                         case 6:  
+                            Game.savePlayer(p);
+                            Game.saveProperty(c);
                             exit(0);
                     }
                 }while(!endGame && (turnchoice!=5||turnchoice!=4||(dice==12&&counter<=3)));
