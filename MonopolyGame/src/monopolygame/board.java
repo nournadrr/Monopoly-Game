@@ -5,70 +5,62 @@
  */
 package monopolygame;
 
+import com.sun.java.swing.plaf.windows.resources.windows;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GraphicsDevice;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class board extends JFrame {
+public class board extends JFrame implements KeyListener {
     ImageIcon  imageicon[];
     JLabel label[];
     Image image;
     Image newimg;
+    JButton Build,Sell,Morgage,Redeem;
     public board() throws IOException {
-        setSize(1750,1000);
+        addKeyListener(this);        
         setLayout(new BorderLayout());
-        //add(new JButton("east"),BorderLayout.EAST);
-        //add(new JButton("north"),BorderLayout.NORTH);
-        //add(new JButton("south"),BorderLayout.SOUTH);
-        //add(new JButton("west"),BorderLayout.WEST);
-        //add(new JButton("extra"),BorderLayout.WEST);
-//        add(new JButton("centre"),BorderLayout.CENTER);
+        setSize(1100,1000);
+        
+//        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        //setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setVisible(true);
-
-//        BufferedImage i=ImageIO.read(new File(string));
-        
-//        p.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        
-
-//        south.setBounds(30, 30, 340, 340);
-
-
 
         JPanel south=new JPanel();
         JPanel west=new JPanel();
         JPanel north=new JPanel();
         JPanel east=new JPanel();
         JPanel centre=new JPanel();
+        JPanel board=new JPanel(new BorderLayout());
         centre.setBackground(Color.BLACK);
-        south.setLayout(new GridLayout(1,9,3,3));
+        south.setLayout(new GridLayout(1,9,4,4));
         south.setBackground(Color.black);
-        west.setLayout(new GridLayout(9,1,3,3));
+        west.setLayout(new GridLayout(9,1,4,4));
         west.setBackground(Color.black);
-        north.setLayout(new GridLayout(1,9,3,3));
+        north.setLayout(new GridLayout(1,9,4,4));
         north.setBackground(Color.black);
-        east.setLayout((new GridLayout(9,1,3,3)));
+        east.setLayout((new GridLayout(9,1,4,4)));
         east.setBackground(Color.black);
         imageicon=new ImageIcon[41];
         label=new JLabel[41];
         
         imageicon[40]=new ImageIcon("src//images//centre.PNG");
-//        image=imageicon[40].getImage();
-//        newimg=image.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
-//        imageicon[40]=new ImageIcon(newimg);
+        image=imageicon[40].getImage();
+        newimg=image.getScaledInstance(870, 735, java.awt.Image.SCALE_SMOOTH);
+        imageicon[40]=new ImageIcon(newimg);
         label[40]=new JLabel();
         label[40].setIcon(imageicon[40]);
         centre.add(label[40]);
-        
-        
-        
         
         
         for(int i=0;i<imageicon.length;i++)
@@ -76,7 +68,7 @@ public class board extends JFrame {
             String s="src//images//"+i+".PNG";
             imageicon[i]=new ImageIcon(s);
             image=imageicon[i].getImage();
-            newimg=image.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
+            newimg=image.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
             imageicon[i]=new ImageIcon(newimg);
         }
         for(int j=11-1;j>=0;j--) {
@@ -99,15 +91,55 @@ public class board extends JFrame {
             label[j].setIcon(imageicon[j]);
             east.add(label[j]);
         }
+        
+        
         add(south,BorderLayout.SOUTH);
         add(west,BorderLayout.WEST);
         add(north,BorderLayout.NORTH);
         add(east,BorderLayout.EAST);
         add(centre,BorderLayout.CENTER);
+        
+        
+                //add(board,BorderLayout.CENTER);  // adding shakl el board 
+//         board.add(south,BorderLayout.SOUTH);
+//        board.add(west,BorderLayout.WEST);
+//        board.add(north,BorderLayout.NORTH);
+//        board.add(east,BorderLayout.EAST);
+//        board.add(centre,BorderLayout.CENTER);
+//        JPanel down=new JPanel(new GridLayout(1,4,5,5));
+//        Build =new JButton("Build");
+//        Sell=new JButton("Sell");
+//        Morgage =new JButton("Morgage");
+//        Redeem=new JButton("Redeem");
+//        down.add(Build);
+//        down.add(Sell);
+//        down.add(Morgage);
+//        down.add(Redeem);
+//        add(down,BorderLayout.SOUTH);
+//        
+//        add(new JLabel("hiiii"),BorderLayout.EAST);
+        
+        
+        
+        
         setVisible(true);
         
         
         
+    }
+
+    @Override
+    public void keyTyped(KeyEvent ke) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode()==KeyEvent.VK_ESCAPE)
+            dispose();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent ke) {
     }
     
 }
