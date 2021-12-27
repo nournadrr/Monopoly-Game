@@ -8,13 +8,14 @@ import java.io.PrintWriter;
 import java.io.File;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 
 
 /**
  *
  * @author Dell
  */
-public abstract class Property {
+public abstract class Property implements Serializable{
 private int ID;
  private String name;
  private int price;

@@ -4,13 +4,14 @@
  * and open the template in the editor.
  */
 package monopolygame;
+import java.io.Serializable;
 import java.util.*;
 /**
  *
  * @author Dell
  */
-public class Player {
-    Scanner in=new Scanner(System.in);
+public class Player implements Serializable{
+    //Scanner in=new Scanner(System.in);
     private int currentLocation;
     private String name;
     private int id;
@@ -147,6 +148,7 @@ public class Player {
     }
     public void mortage()
     {
+        Scanner in=new Scanner(System.in);
         System.out.println("choose which property u want to mortgage\n");
         int prid=in.nextInt();  // id of chosen property
         if(properties[prid].getOwnerid()==this.id)
