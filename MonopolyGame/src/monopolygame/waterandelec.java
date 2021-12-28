@@ -10,9 +10,9 @@ public class waterandelec extends Property {
         super(ID, name,"", price,0,ismortaged,isbought,ownerid);
     }
     
-    public  int getRent(int dice,Property[] c) {
+    public  int getRent(int dice,Object[] c) {
         
-        if(c[26].getOwnerid()==c[27].getOwnerid())
+        if(((waterandelec)c[26]).getOwnerid()==((waterandelec)c[27]).getOwnerid())
             return 10*dice;
         else
             return 4*dice;

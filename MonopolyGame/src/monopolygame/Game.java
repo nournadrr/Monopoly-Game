@@ -2,38 +2,45 @@ package monopolygame;
 import java.util.*;
 import java.io.PrintWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
-public class Game {
-    Scanner in=new Scanner(System.in);
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+public class Game implements Serializable{
+//    Scanner in=new Scanner(System.in);
     
     
-    public void buyMortage(Player p)
-    {
-        System.out.println("do you want to buy a mortaged property?");
-        String choice=in.next();
-        if(choice.equalsIgnoreCase("yes"))
-        {
-            for(int i=0;i<p.getNumOfProperties();i++)
-            {
-                if(p.getProperties(i).isIsmortaged())
-                    System.out.println(p.getProperties(i).getName()+"  ID:"+p.getProperties(i).getID());
-            }
-            System.out.println("enter id of property to buy");
-            int id=in.nextInt();
-            for(int i=0;i<p.getNumOfProperties();i++)
-            {
-                if(p.getProperties(i).getID()==id)
-                {
-                    p.getProperties(i).setIsmortaged(false);
-                    p.decrementBalance(p.getProperties(i).getPrice());
-                }
-            }
-        }
-    }
+//    public void buyMortage(Player p)
+//    {
+//        System.out.println("do you want to buy a mortaged property?");
+//        String choice=in.next();
+//        if(choice.equalsIgnoreCase("yes"))
+//        {
+//            for(int i=0;i<p.getNumOfProperties();i++)
+//            {
+//                if(p.getProperties(i).isIsmortaged())
+//                    System.out.println(p.getProperties(i).getName()+"  ID:"+p.getProperties(i).getID());
+//            }
+//            System.out.println("enter id of property to buy");
+//            int id=in.nextInt();
+//            for(int i=0;i<p.getNumOfProperties();i++)
+//            {
+//                if(p.getProperties(i).getID()==id)
+//                {
+//                    p.getProperties(i).setIsmortaged(false);
+//                    p.decrementBalance(p.getProperties(i).getPrice());
+//                }
+//            }
+//        }
+//    }
     
     
-    public void canbuild(Player pl,Property[] pr) {
+    public void canbuild(Player pl,Object[] pr) {
+        Scanner in=new Scanner(System.in);
         System.out.println("Choose the property u want to build in");
         int choice=in.nextInt();
         boolean canBuild=true;
@@ -41,9 +48,9 @@ public class Game {
         {
             for(int i=0;i<22;i++)
             {
-                if(pr[choice].getColor().equalsIgnoreCase(pr[i].getColor()))
+                if(((Property)pr[choice]).getColor().equalsIgnoreCase(((Property)pr[i]).getColor()))
                 {
-                    if(pr[i].getOwnerid()!=pl.getId())
+                    if(((Property)pr[i]).getOwnerid()!=pl.getId())
                         canBuild=false;
                 }                        
             }
@@ -62,7 +69,7 @@ public class Game {
             System.out.println("u can only build in a city");
     }
     
-    public static  void roll_Dice(Player [] p,Property [] c,int dice,int counter, int i){
+    public static  void roll_Dice(Player [] p,Object [] c,int dice,int counter, int i){
         Scanner sc=new Scanner(System.in);
 
         Taxes[] ta=new Taxes[2];
@@ -87,11 +94,11 @@ public class Game {
            p[i].incrementCurrentLocation(dice);
            for(int j=0;j<c.length;j++)  //Properties
            {
-               if(p[i].getCurrentLocation()==c[j].getID())
+               if(p[i].getCurrentLocation()==((Property)c[j]).getID())
                {
-                   System.out.println("you are now standing on : "+c[j].getName());
+                   System.out.println("you are now standing on : "+((Property)c[j]).getName());
                    isit=true;
-                   if(c[j].Isbought())
+                   if(((Property)c[j]).Isbought())
                    {
                        int rentprice;
                        if(j==26||j==27) 
@@ -103,21 +110,21 @@ public class Game {
                        }
                        else if(j==22||j==23||j==24||j==25)
                        {
-                           rentprice=((Train)c[j]).getRent(c,c[j].getOwnerid());
+                           rentprice=((Train)c[j]).getRent(c,((Property)c[j]).getOwnerid());
                            System.out.println("Please pay : "+rentprice);
                            p[i].decrementBalance(rentprice);
                        }
 
                        else 
                        {
-                           rentprice=c[j].getRent();
+                           rentprice=((Property)c[j]).getRent();
                            System.out.println("Please pay : "+rentprice);
                            p[i].decrementBalance(rentprice);
 
                        }
-                       if(!c[j].isIsmortaged())
+                       if(!((Property)c[j]).isIsmortaged())
                        {
-                           p[c[j].getOwnerid()].incrementBalance(rentprice);
+                           p[((Property)c[j]).getOwnerid()].incrementBalance(rentprice);
                        }
 
                    }
@@ -125,10 +132,10 @@ public class Game {
                    {
                        System.out.println("do u wanna buy enter yes for yes and no for no\n");
                        String buuuyy=sc.next();
-                       if(p[i].getBalance()>c[j].getPrice()&&buuuyy.equalsIgnoreCase("yes"))
+                       if(p[i].getBalance()>((Property)c[j]).getPrice()&&buuuyy.equalsIgnoreCase("yes"))
                        {
-                           p[i].decrementBalance(c[j].getPrice());
-                           c[j].setOwnerid(i);
+                           p[i].decrementBalance(((Property)c[j]).getPrice());
+                           ((Property)c[j]).setOwnerid(i);
                            p[i].setProperties(c[j]);
                        }
                    }
@@ -168,103 +175,130 @@ public class Game {
     }
     
     
-    public static void savePlayer(Player[] p) throws FileNotFoundException
+    public static void savePlayer(Player[] p) throws FileNotFoundException, IOException
     {
-        String name="savePlayer.txt";
-        File file=new File(name);
-        PrintWriter out=new PrintWriter(file);
-        //save player data
-        for(int i=0;i<p.length;i++)
-        {
-            out.print(p[i].getId()+"  "+p[i].getName()+"  "+p[i].getBalance()+"  "+p[i].getCurrentLocation()+"  "+p[i].getIsJail()+"  "+
-                    p[i].getIsPlaying()+"  "+p[i].getJailCard()+"  "+p[i].getNumOfProperties());
-            for(int j=0;j<p[i].getNumOfProperties();j++)
-            {
-                out.print(p[i].getProperties(j).getID());
-            }
-            out.println();
-        }
-        out.close();
-    }
-    public static void loadProperty(Property c[]) throws FileNotFoundException
-    {
-        String name="saveProperty.txt";
-        File file=new File(name);
-        Scanner input=new Scanner(file);
-        for(int i=0;i<22;i++)
-        {
-            c[i]=new Cities(input.nextInt(),input.nextInt(),input.nextInt(),
-            input.nextInt(),input.nextInt(),input.nextInt(),input.nextInt(),input.next(),
-                    input.next(),input.nextInt(),input.nextInt(),input.nextBoolean(),input.nextBoolean()
-                    ,input.nextInt(),input.nextInt());
-        }
-        for(int i=22;i<26;i++)
-        {
-            c[i]=new Train(input.nextInt(),input.next(),input.next(),input.nextInt(),input.nextInt(),input.nextBoolean()
-                    ,input.nextBoolean(),input.nextInt());
-        }
-
-        for(int i=26;i<28;i++)
-            c[i]=new waterandelec(input.nextInt(),input.next(),input.nextInt(),input.nextBoolean(),input.nextBoolean(),input.nextInt());
+//        String name="SaveProperty.bin";
+//        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));
+//        out.writeObject(c);
+//        out.close();
         
-        input.close();
+        
+        String name="SavePlayers.bin";
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));
+        out.writeObject(p);
+        out.close();
+//        File file=new File(name);
+//        PrintWriter out=new PrintWriter(file);
+//        //save player data
+//        for(int i=0;i<p.length;i++)
+//        {
+//            out.print(p[i].getId()+"  "+p[i].getName()+"  "+p[i].getBalance()+"  "+p[i].getCurrentLocation()+"  "+p[i].getIsJail()+"  "+
+//                    p[i].getIsPlaying()+"  "+p[i].getJailCard()+"  "+p[i].getNumOfProperties());
+//            for(int j=0;j<p[i].getNumOfProperties();j++)
+//            {
+//                out.print(p[i].getProperties(j).getID());
+//            }
+//            out.println();
+//        }
+//        out.close();
+    }
+    public static Object[] loadProperty(Object[] c) throws FileNotFoundException, IOException, ClassNotFoundException
+    {
+        String name="SaveProperty.bin";
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(name));
+         c=(Object[])in.readObject();
+         in.close();
+         return c;
+//        File file=new File(name);
+//        Scanner input=new Scanner(file);
+//        for(int i=0;i<22;i++)
+//        {
+//            c[i]=(Cities)in.readObject();
+////            c[i]=new Cities(input.nextInt(),input.nextInt(),input.nextInt(),
+////            input.nextInt(),input.nextInt(),input.nextInt(),input.nextInt(),input.next(),
+////                    input.next(),input.nextInt(),input.nextInt(),input.nextBoolean(),input.nextBoolean()
+////                    ,input.nextInt(),input.nextInt());
+//        }
+//        for(int i=22;i<26;i++)
+//        {
+//            c[i]=(Train)in.readObject();
+////            c[i]=new Train(input.nextInt(),input.next(),input.next(),input.nextInt(),input.nextInt(),input.nextBoolean()
+////                    ,input.nextBoolean(),input.nextInt());
+//        }
+////
+//        for(int i=26;i<28;i++)
+//            c[i]=(waterandelec)in.readObject();
+////            c[i]=new waterandelec(input.nextInt(),input.next(),input.nextInt(),input.nextBoolean(),input.nextBoolean(),input.nextInt());
+////        
+//
+//        in.close();
+//        input.close();
     }
     
-    public static void loadPlayer(Player[] p,Property[] c) throws FileNotFoundException
+    public static Player[] loadPlayer(Player[] p) throws FileNotFoundException, IOException, ClassNotFoundException
     {
-        String name="savePlayer.txt";
-        File file=new File(name);
-        Scanner input=new Scanner(file);
-        for(int i=0;i<p.length;i++)
-        {
-            p[i]=new Player(input.nextInt(),input.next(),input.nextInt(),input.nextInt(),input.nextBoolean(),input.nextBoolean(),input.nextBoolean()
-            ,input.nextInt(),input.nextInt());
-            //properties
-            for(int j=0;j<p[i].getNumOfProperties();j++)
-            {
-                int x=input.nextInt();
-                for(int z=0;z<c.length;z++)
-                {
-                    if(x==c[z].getID())
-                    {
-                        p[i].setProperties(c[z]);
-                        p[i].decrementproperties();
-                    }
-                }
-            }
-        }
+        String name="SavePlayers.bin";
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(name));
+        //Player arr[]=(Player[])in.readObject();
+        p=(Player[])in.readObject();
+       //c[]=(Property) in.readObject();
+        in.close();
+        return p;
+//        File file=new File(name);
+//        Scanner input=new Scanner(file);
+//        for(int i=0;i<p.length;i++)
+//        {
+//            p[i]=new Player(input.nextInt(),input.next(),input.nextInt(),input.nextInt(),input.nextBoolean(),input.nextBoolean(),input.nextBoolean()
+//            ,input.nextInt(),input.nextInt());
+//            //properties
+//            for(int j=0;j<p[i].getNumOfProperties();j++)
+//            {
+//                int x=input.nextInt();
+//                for(int z=0;z<c.length;z++)
+//                {
+//                    if(x==c[z].getID())
+//                    {
+//                        p[i].setProperties(c[z]);
+//                        p[i].decrementproperties();
+//                    }
+//                }
+//            }
+//        }
         
     }
     
-    public static void saveProperty(Property c[]) throws FileNotFoundException
+    public static void saveProperty(Object[] c) throws FileNotFoundException, IOException
     {
-        String name="saveProperty.txt";
-        File file=new File(name);
-        PrintWriter out=new PrintWriter(file);
-        for(int i=0;i<22;i++)
-        {
-            out.print(((Cities)c[i]).getHousesprice()+"  "+((Cities)c[i]).getRenthouse()+"  "+((Cities)c[i]).getRent2()+"  "+
-                    ((Cities)c[i]).getRent3()+"  "+((Cities)c[i]).getRent4()+"  "+((Cities)c[i]).getRentofhotel()+"  "+((Cities)c[i]).getID()
-            +"  "+((Cities)c[i]).getName()+"  "+((Cities)c[i]).getColor()+"  "+((Cities)c[i]).getPrice()+"  "+((Cities)c[i]).getRent()
-            +"  "+((Cities)c[i]).isIsmortaged()+"  "+((Cities)c[i]).Isbought()+"  "+((Cities)c[i]).getOwnerid()+"  "+((Cities)c[i]).getHousecounter());
-            
-            out.println();
-        }
-        for(int i=22;i<26;i++)
-        {
-            out.print(((Train)c[i]).getID()+"  "+((Train)c[i]).getName()+"  "+((Train)c[i]).getColor()+"  "+((Train)c[i]).getPrice()
-            +"  "+((Train)c[i]).getRent()+"  "+((Train)c[i]).isIsmortaged()+"  "+((Train)c[i]).Isbought()+"  "+((Train)c[i]).getOwnerid());
-            
-            out.println();
-        }
-        for(int i=26;i<28;i++)
-        {
-            out.print(((waterandelec)c[i]).getID()+"  "+((waterandelec)c[i]).getName()+"  "+((waterandelec)c[i]).getPrice()
-            +"  "+((waterandelec)c[i]).isIsmortaged()+"  "+((waterandelec)c[i]).Isbought()+"  "+((waterandelec)c[i]).getOwnerid());
-            
-            out.println();
-        }
-        
+        String name="SaveProperty.bin";
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));
+        out.writeObject(c);
         out.close();
+//        File file=new File(name);
+//        PrintWriter out=new PrintWriter(file);
+//        for(int i=0;i<22;i++)
+//        {
+//            out.print(((Cities)c[i]).getHousesprice()+"  "+((Cities)c[i]).getRenthouse()+"  "+((Cities)c[i]).getRent2()+"  "+
+//                    ((Cities)c[i]).getRent3()+"  "+((Cities)c[i]).getRent4()+"  "+((Cities)c[i]).getRentofhotel()+"  "+((Cities)c[i]).getID()
+//            +"  "+((Cities)c[i]).getName()+"  "+((Cities)c[i]).getColor()+"  "+((Cities)c[i]).getPrice()+"  "+((Cities)c[i]).getRent()
+//            +"  "+((Cities)c[i]).isIsmortaged()+"  "+((Cities)c[i]).Isbought()+"  "+((Cities)c[i]).getOwnerid()+"  "+((Cities)c[i]).getHousecounter());
+//            
+//            out.println();
+//        }
+//        for(int i=22;i<26;i++)
+//        {
+//            out.print(((Train)c[i]).getID()+"  "+((Train)c[i]).getName()+"  "+((Train)c[i]).getColor()+"  "+((Train)c[i]).getPrice()
+//            +"  "+((Train)c[i]).getRent()+"  "+((Train)c[i]).isIsmortaged()+"  "+((Train)c[i]).Isbought()+"  "+((Train)c[i]).getOwnerid());
+//            
+//            out.println();
+//        }
+//        for(int i=26;i<28;i++)
+//        {
+//            out.print(((waterandelec)c[i]).getID()+"  "+((waterandelec)c[i]).getName()+"  "+((waterandelec)c[i]).getPrice()
+//            +"  "+((waterandelec)c[i]).isIsmortaged()+"  "+((waterandelec)c[i]).Isbought()+"  "+((waterandelec)c[i]).getOwnerid());
+//            
+//            out.println();
+//        }
+//        
+//        out.close();
     }
 }
