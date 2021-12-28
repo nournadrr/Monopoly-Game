@@ -176,31 +176,11 @@ public class Game implements Serializable{
     
     
     public static void savePlayer(Player[] p) throws FileNotFoundException, IOException
-    {
-//        String name="SaveProperty.bin";
-//        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));
-//        out.writeObject(c);
-//        out.close();
-        
-        
+    {        
         String name="SavePlayers.bin";
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));
         out.writeObject(p);
         out.close();
-//        File file=new File(name);
-//        PrintWriter out=new PrintWriter(file);
-//        //save player data
-//        for(int i=0;i<p.length;i++)
-//        {
-//            out.print(p[i].getId()+"  "+p[i].getName()+"  "+p[i].getBalance()+"  "+p[i].getCurrentLocation()+"  "+p[i].getIsJail()+"  "+
-//                    p[i].getIsPlaying()+"  "+p[i].getJailCard()+"  "+p[i].getNumOfProperties());
-//            for(int j=0;j<p[i].getNumOfProperties();j++)
-//            {
-//                out.print(p[i].getProperties(j).getID());
-//            }
-//            out.println();
-//        }
-//        out.close();
     }
     public static Object[] loadProperty(Object[] c) throws FileNotFoundException, IOException, ClassNotFoundException
     {
@@ -209,62 +189,15 @@ public class Game implements Serializable{
          c=(Object[])in.readObject();
          in.close();
          return c;
-//        File file=new File(name);
-//        Scanner input=new Scanner(file);
-//        for(int i=0;i<22;i++)
-//        {
-//            c[i]=(Cities)in.readObject();
-////            c[i]=new Cities(input.nextInt(),input.nextInt(),input.nextInt(),
-////            input.nextInt(),input.nextInt(),input.nextInt(),input.nextInt(),input.next(),
-////                    input.next(),input.nextInt(),input.nextInt(),input.nextBoolean(),input.nextBoolean()
-////                    ,input.nextInt(),input.nextInt());
-//        }
-//        for(int i=22;i<26;i++)
-//        {
-//            c[i]=(Train)in.readObject();
-////            c[i]=new Train(input.nextInt(),input.next(),input.next(),input.nextInt(),input.nextInt(),input.nextBoolean()
-////                    ,input.nextBoolean(),input.nextInt());
-//        }
-////
-//        for(int i=26;i<28;i++)
-//            c[i]=(waterandelec)in.readObject();
-////            c[i]=new waterandelec(input.nextInt(),input.next(),input.nextInt(),input.nextBoolean(),input.nextBoolean(),input.nextInt());
-////        
-//
-//        in.close();
-//        input.close();
     }
     
     public static Player[] loadPlayer(Player[] p) throws FileNotFoundException, IOException, ClassNotFoundException
     {
         String name="SavePlayers.bin";
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(name));
-        //Player arr[]=(Player[])in.readObject();
         p=(Player[])in.readObject();
-       //c[]=(Property) in.readObject();
         in.close();
         return p;
-//        File file=new File(name);
-//        Scanner input=new Scanner(file);
-//        for(int i=0;i<p.length;i++)
-//        {
-//            p[i]=new Player(input.nextInt(),input.next(),input.nextInt(),input.nextInt(),input.nextBoolean(),input.nextBoolean(),input.nextBoolean()
-//            ,input.nextInt(),input.nextInt());
-//            //properties
-//            for(int j=0;j<p[i].getNumOfProperties();j++)
-//            {
-//                int x=input.nextInt();
-//                for(int z=0;z<c.length;z++)
-//                {
-//                    if(x==c[z].getID())
-//                    {
-//                        p[i].setProperties(c[z]);
-//                        p[i].decrementproperties();
-//                    }
-//                }
-//            }
-//        }
-        
     }
     
     public static void saveProperty(Object[] c) throws FileNotFoundException, IOException
@@ -273,32 +206,5 @@ public class Game implements Serializable{
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));
         out.writeObject(c);
         out.close();
-//        File file=new File(name);
-//        PrintWriter out=new PrintWriter(file);
-//        for(int i=0;i<22;i++)
-//        {
-//            out.print(((Cities)c[i]).getHousesprice()+"  "+((Cities)c[i]).getRenthouse()+"  "+((Cities)c[i]).getRent2()+"  "+
-//                    ((Cities)c[i]).getRent3()+"  "+((Cities)c[i]).getRent4()+"  "+((Cities)c[i]).getRentofhotel()+"  "+((Cities)c[i]).getID()
-//            +"  "+((Cities)c[i]).getName()+"  "+((Cities)c[i]).getColor()+"  "+((Cities)c[i]).getPrice()+"  "+((Cities)c[i]).getRent()
-//            +"  "+((Cities)c[i]).isIsmortaged()+"  "+((Cities)c[i]).Isbought()+"  "+((Cities)c[i]).getOwnerid()+"  "+((Cities)c[i]).getHousecounter());
-//            
-//            out.println();
-//        }
-//        for(int i=22;i<26;i++)
-//        {
-//            out.print(((Train)c[i]).getID()+"  "+((Train)c[i]).getName()+"  "+((Train)c[i]).getColor()+"  "+((Train)c[i]).getPrice()
-//            +"  "+((Train)c[i]).getRent()+"  "+((Train)c[i]).isIsmortaged()+"  "+((Train)c[i]).Isbought()+"  "+((Train)c[i]).getOwnerid());
-//            
-//            out.println();
-//        }
-//        for(int i=26;i<28;i++)
-//        {
-//            out.print(((waterandelec)c[i]).getID()+"  "+((waterandelec)c[i]).getName()+"  "+((waterandelec)c[i]).getPrice()
-//            +"  "+((waterandelec)c[i]).isIsmortaged()+"  "+((waterandelec)c[i]).Isbought()+"  "+((waterandelec)c[i]).getOwnerid());
-//            
-//            out.println();
-//        }
-//        
-//        out.close();
     }
 }
