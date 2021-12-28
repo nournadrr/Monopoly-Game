@@ -61,33 +61,33 @@ public class MonopolyGame {
 //        //Property[] we=new Property[2];
 //        s[26]=new waterandelec(12,"ELECTRIC COMPANY",150);
 //        s[27]=new waterandelec(28,"WATER WORKS",150);
+        
+        
 //        
-//        for(int i=0;i<s.length;i++)
-//            a.add(s[i]);
-//        
-//        Game.saveProperty(a);
+//        Game.saveProperty(s);
        
         
         
-        ArrayList<Object> arraylist=new ArrayList<>();
+        //ArrayList<Object> arraylist=new ArrayList<>();
                 Scanner sc=new Scanner(System.in);
                 Game game=new Game();
-                Player[] p=new Player[3];
-                //Property[] c=new Property[28];
+                Player[] p=null;
+                Object[] c=null;//=new Property[28];
 
                 System.out.println("enter 1 for new game or 2 to load a game");
                 int choose =sc.nextInt();
                 if(choose==2)
                 {
-                    Game.loadProperty(arraylist);
-                    Game.loadPlayer(p,arraylist);
-                    
+                    Game.loadProperty(c);
+                    p=Game.loadPlayer(p);
+                    System.out.println(p[1].getName()+" "+p[0].getName());
                 }
                 else
                 {
                     //Property.readFromfile(arraylist);
-                    arraylist=Game.loadProperty(arraylist);
-                    System.out.println(arraylist.get(18));
+                    c=Game.loadProperty(c);
+                    System.out.println(((Property)c[18]).getName());
+                    p=new Player[3];
                     p[0]=new Player();
                     p[0].setName("abdo");
                     p[0].setId(1);
@@ -112,46 +112,46 @@ public class MonopolyGame {
 
         
         
-//        int dice=0,turnchoice, counter=0;
-//        
-//        while(Player.getNoOfPlayers()>1)
-//        {
-//            for(int i=0;i<p.length;i++)
-//            {
-//                boolean endGame=false;
-//                boolean rolldice=false;
-//                do {
-//                    System.out.println(p[i].getName()+" turn with balance "+p[i].getBalance()+
-//                            "your current location is "+p[i].getCurrentLocation());
-//                    if(!rolldice)
-//                    System.out.println("Choose\n 1:Buy mortgaged property\n 2:build a house"
-//                            + "\n 3:roll dice \n 4:end turn \n 5:forfeit \n 6:save and exit");
-//                    else
-//                        System.out.println("Choose\n 1:Buy mortgaged property\n 2:build a house"
-//                            + "\n 4:end turn \n 5:forfeit \n 6:save and exit");
-//
-//                     turnchoice=sc.nextInt();
-//
-//                     if(turnchoice==3&&rolldice)
-//                     {
-//                         break;
-//                     }
-//                    switch(turnchoice) {
-//                        case 1:game.buyMortage(p[i]); break;
-//                        case 2:game.canbuild(p[i], arraylist); break;                     
-//                        case 3:Game.roll_Dice(p,arraylist,dice,counter,i);rolldice=true; break;                      
-//                        case 4:endGame=true;break;                            
-//                        case 5:
-//                            p[i].setIsPlaying(false);
-//                            Player.decrementPlayers();
-//                            break;
-//                        case 6:  
-//                            Game.savePlayer(p);
-//                            Game.saveProperty(c);
-//                            exit(0);
-//                    }
-//                }while(!endGame && (turnchoice!=5||turnchoice!=4||(dice==12&&counter<=3)));
-//            }
-//        }        
+        int dice=0,turnchoice, counter=0;
+        
+        while(true)//Player.getNoOfPlayers()>1)
+        {
+            for(int i=0;i<p.length;i++)
+            {
+                boolean endGame=false;
+                boolean rolldice=false;
+                do {
+                    System.out.println(p[i].getName()+" turn with balance "+p[i].getBalance()+
+                            "your current location is "+p[i].getCurrentLocation());
+                    if(!rolldice)
+                    System.out.println("Choose\n 1:Buy mortgaged property\n 2:build a house"
+                            + "\n 3:roll dice \n 4:end turn \n 5:forfeit \n 6:save and exit");
+                    else
+                        System.out.println("Choose\n 1:Buy mortgaged property\n 2:build a house"
+                            + "\n 4:end turn \n 5:forfeit \n 6:save and exit");
+
+                     turnchoice=sc.nextInt();
+
+                     if(turnchoice==3&&rolldice)
+                     {
+                         break;
+                     }
+                    switch(turnchoice) {
+                        //case 1:game.buyMortage(p[i]); break;
+                        case 2:game.canbuild(p[i], c); break;                     
+                        case 3:Game.roll_Dice(p,c,dice,counter,i);rolldice=true; break;                      
+                        case 4:endGame=true;break;                            
+                        case 5:
+                            p[i].setIsPlaying(false);
+                            Player.decrementPlayers();
+                            break;
+                        case 6:  
+                            Game.savePlayer(p);
+                            Game.saveProperty(c);
+                            exit(0);
+                    }
+                }while(!endGame && (turnchoice!=5||turnchoice!=4||(dice==12&&counter<=3)));
+            }
+        }        
     }    
 }

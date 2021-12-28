@@ -11,35 +11,36 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 public class Game implements Serializable{
-    Scanner in=new Scanner(System.in);
+//    Scanner in=new Scanner(System.in);
     
     
-    public void buyMortage(Player p)
-    {
-        System.out.println("do you want to buy a mortaged property?");
-        String choice=in.next();
-        if(choice.equalsIgnoreCase("yes"))
-        {
-            for(int i=0;i<p.getNumOfProperties();i++)
-            {
-                if(p.getProperties(i).isIsmortaged())
-                    System.out.println(p.getProperties(i).getName()+"  ID:"+p.getProperties(i).getID());
-            }
-            System.out.println("enter id of property to buy");
-            int id=in.nextInt();
-            for(int i=0;i<p.getNumOfProperties();i++)
-            {
-                if(p.getProperties(i).getID()==id)
-                {
-                    p.getProperties(i).setIsmortaged(false);
-                    p.decrementBalance(p.getProperties(i).getPrice());
-                }
-            }
-        }
-    }
+//    public void buyMortage(Player p)
+//    {
+//        System.out.println("do you want to buy a mortaged property?");
+//        String choice=in.next();
+//        if(choice.equalsIgnoreCase("yes"))
+//        {
+//            for(int i=0;i<p.getNumOfProperties();i++)
+//            {
+//                if(p.getProperties(i).isIsmortaged())
+//                    System.out.println(p.getProperties(i).getName()+"  ID:"+p.getProperties(i).getID());
+//            }
+//            System.out.println("enter id of property to buy");
+//            int id=in.nextInt();
+//            for(int i=0;i<p.getNumOfProperties();i++)
+//            {
+//                if(p.getProperties(i).getID()==id)
+//                {
+//                    p.getProperties(i).setIsmortaged(false);
+//                    p.decrementBalance(p.getProperties(i).getPrice());
+//                }
+//            }
+//        }
+//    }
     
     
-    public void canbuild(Player pl,Property[] pr) {
+    public void canbuild(Player pl,Object[] pr) {
+        Scanner in=new Scanner(System.in);
         System.out.println("Choose the property u want to build in");
         int choice=in.nextInt();
         boolean canBuild=true;
@@ -47,9 +48,9 @@ public class Game implements Serializable{
         {
             for(int i=0;i<22;i++)
             {
-                if(pr[choice].getColor().equalsIgnoreCase(pr[i].getColor()))
+                if(((Property)pr[choice]).getColor().equalsIgnoreCase(((Property)pr[i]).getColor()))
                 {
-                    if(pr[i].getOwnerid()!=pl.getId())
+                    if(((Property)pr[i]).getOwnerid()!=pl.getId())
                         canBuild=false;
                 }                        
             }
@@ -68,7 +69,7 @@ public class Game implements Serializable{
             System.out.println("u can only build in a city");
     }
     
-    public static  void roll_Dice(Player [] p,Property [] c,int dice,int counter, int i){
+    public static  void roll_Dice(Player [] p,Object [] c,int dice,int counter, int i){
         Scanner sc=new Scanner(System.in);
 
         Taxes[] ta=new Taxes[2];
@@ -93,11 +94,11 @@ public class Game implements Serializable{
            p[i].incrementCurrentLocation(dice);
            for(int j=0;j<c.length;j++)  //Properties
            {
-               if(p[i].getCurrentLocation()==c[j].getID())
+               if(p[i].getCurrentLocation()==((Property)c[j]).getID())
                {
-                   System.out.println("you are now standing on : "+c[j].getName());
+                   System.out.println("you are now standing on : "+((Property)c[j]).getName());
                    isit=true;
-                   if(c[j].Isbought())
+                   if(((Property)c[j]).Isbought())
                    {
                        int rentprice;
                        if(j==26||j==27) 
@@ -109,21 +110,21 @@ public class Game implements Serializable{
                        }
                        else if(j==22||j==23||j==24||j==25)
                        {
-                           rentprice=((Train)c[j]).getRent(c,c[j].getOwnerid());
+                           rentprice=((Train)c[j]).getRent(c,((Property)c[j]).getOwnerid());
                            System.out.println("Please pay : "+rentprice);
                            p[i].decrementBalance(rentprice);
                        }
 
                        else 
                        {
-                           rentprice=c[j].getRent();
+                           rentprice=((Property)c[j]).getRent();
                            System.out.println("Please pay : "+rentprice);
                            p[i].decrementBalance(rentprice);
 
                        }
-                       if(!c[j].isIsmortaged())
+                       if(!((Property)c[j]).isIsmortaged())
                        {
-                           p[c[j].getOwnerid()].incrementBalance(rentprice);
+                           p[((Property)c[j]).getOwnerid()].incrementBalance(rentprice);
                        }
 
                    }
@@ -131,10 +132,10 @@ public class Game implements Serializable{
                    {
                        System.out.println("do u wanna buy enter yes for yes and no for no\n");
                        String buuuyy=sc.next();
-                       if(p[i].getBalance()>c[j].getPrice()&&buuuyy.equalsIgnoreCase("yes"))
+                       if(p[i].getBalance()>((Property)c[j]).getPrice()&&buuuyy.equalsIgnoreCase("yes"))
                        {
-                           p[i].decrementBalance(c[j].getPrice());
-                           c[j].setOwnerid(i);
+                           p[i].decrementBalance(((Property)c[j]).getPrice());
+                           ((Property)c[j]).setOwnerid(i);
                            p[i].setProperties(c[j]);
                        }
                    }
@@ -201,11 +202,11 @@ public class Game implements Serializable{
 //        }
 //        out.close();
     }
-    public static ArrayList<Object> loadProperty(ArrayList<Object> c) throws FileNotFoundException, IOException, ClassNotFoundException
+    public static Object[] loadProperty(Object[] c) throws FileNotFoundException, IOException, ClassNotFoundException
     {
         String name="SaveProperty.bin";
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(name));
-         c=(ArrayList<Object>)in.readObject();
+         c=(Object[])in.readObject();
          in.close();
          return c;
 //        File file=new File(name);
@@ -234,7 +235,7 @@ public class Game implements Serializable{
 //        input.close();
     }
     
-    public static void loadPlayer(Player[] p,ArrayList<Object> c) throws FileNotFoundException, IOException, ClassNotFoundException
+    public static Player[] loadPlayer(Player[] p) throws FileNotFoundException, IOException, ClassNotFoundException
     {
         String name="SavePlayers.bin";
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(name));
@@ -242,6 +243,7 @@ public class Game implements Serializable{
         p=(Player[])in.readObject();
        //c[]=(Property) in.readObject();
         in.close();
+        return p;
 //        File file=new File(name);
 //        Scanner input=new Scanner(file);
 //        for(int i=0;i<p.length;i++)
@@ -265,7 +267,7 @@ public class Game implements Serializable{
         
     }
     
-    public static void saveProperty(ArrayList<Object> c) throws FileNotFoundException, IOException
+    public static void saveProperty(Object[] c) throws FileNotFoundException, IOException
     {
         String name="SaveProperty.bin";
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));

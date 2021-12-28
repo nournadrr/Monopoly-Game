@@ -4,17 +4,18 @@
  * and open the template in the editor.
  */
 package monopolygame;
+import java.io.Serializable;
 import java.util.*;
 /**
  *
  * @author Dell
  */
-public class Player {
-    Scanner in=new Scanner(System.in);
+public class Player implements Serializable{
+//    Scanner in=new Scanner(System.in);
     private int currentLocation;
     private String name;
     private int id;
-    private Property[] properties;
+    private Object[] properties;
 
     private int numOfProperties;
     private static int noOfPlayers=0;
@@ -77,7 +78,7 @@ public class Player {
     {
         this.id=id;
     }
-    public void setProperties(Property p)
+    public void setProperties(Object p)
     {
         properties[numOfProperties++]=p;
 
@@ -101,6 +102,11 @@ public class Player {
     {
         noOfPlayers--;
     }
+    
+//    public static void incrementPlayers()
+//    {
+//        noOfPlayers++;
+//    }
     public void setIsPlaying(boolean playing)
     {
         isPlaying=playing;
@@ -125,7 +131,7 @@ public class Player {
                 boolean choice=false;
                 for(int i=0;i<numOfProperties;i++)
                 {
-                    if(properties[i].isIsmortaged()==false)
+                    if(((Property)properties[i]).isIsmortaged()==false)
                     {
                         choice=true;
                         break;
@@ -147,14 +153,15 @@ public class Player {
     }
     public void mortage()
     {
+        Scanner in=new Scanner(System.in);
         System.out.println("choose which property u want to mortgage\n");
         int prid=in.nextInt();  // id of chosen property
-        if(properties[prid].getOwnerid()==this.id)
+        if(((Property)properties[prid]).getOwnerid()==this.id)
         {
-            if(properties[prid].isIsmortaged()==false)
+            if(((Property)properties[prid]).isIsmortaged()==false)
             {
-                properties[prid].setIsmortaged(true);
-                incrementBalance(properties[prid].getPrice()); 
+                ((Property)properties[prid]).setIsmortaged(true);
+                incrementBalance(((Property)properties[prid]).getPrice()); 
             }
             else 
                 System.out.println("it is already mortgaged\n");
@@ -196,7 +203,7 @@ public class Player {
     {
         return balance;
     }
-    public Property getProperties(int i)
+    public Object getProperties(int i)
     {
         return properties[i];
     }
