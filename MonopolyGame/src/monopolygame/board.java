@@ -15,6 +15,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -23,7 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class board extends JFrame implements KeyListener {
+public class board extends JFrame implements KeyListener,MouseListener {
     ImageIcon  imageicon[];
     JLabel label[];
     Image image;
@@ -77,6 +79,7 @@ public class board extends JFrame implements KeyListener {
             label[j]=new JLabel();
             label[j].setIcon(imageicon[j]);
             south.add(label[j]);
+            label[j].addMouseListener(this);
         }
         for(int j=19;j>=11;j--) {
             label[j]=new JLabel();
@@ -93,19 +96,13 @@ public class board extends JFrame implements KeyListener {
             label[j].setIcon(imageicon[j]);
             east.add(label[j]);
         }
-//        add(south,BorderLayout.SOUTH);
-//        add(west,BorderLayout.WEST);
-//        add(north,BorderLayout.NORTH);
-//        add(east,BorderLayout.EAST);
-//        add(centre,BorderLayout.CENTER);
+
         board.add(south,BorderLayout.SOUTH);
         board.add(west,BorderLayout.WEST);
         board.add(north,BorderLayout.NORTH);
         board.add(east,BorderLayout.EAST);
         board.add(centre,BorderLayout.CENTER);
-        add(board,BorderLayout.CENTER);  // adding shakl el board 
-        
-        
+        add(board,BorderLayout.CENTER);  // adding shakl el board fel centre
         
         JPanel down=new JPanel(new GridLayout(1,4,20,5));//up,left,down,right
         down.setBorder( BorderFactory.createEmptyBorder(   20,49,20,220) );
@@ -119,23 +116,26 @@ public class board extends JFrame implements KeyListener {
         down.add(Morgage);
         down.add(Redeem);
         add(down,BorderLayout.SOUTH);
-        
-        
-        
-        add(new JLabel("hiiii"),BorderLayout.EAST);
-        
-        
-        
-        
+                
+        add(new JLabel("hiiii"),BorderLayout.EAST);// players details
         setVisible(true);
-        
-        
-        
     }
+    
+    
+     
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @Override
-    public void keyTyped(KeyEvent ke) {
-    }
+    public void keyTyped(KeyEvent ke) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -146,5 +146,25 @@ public class board extends JFrame implements KeyListener {
     @Override
     public void keyReleased(KeyEvent ke) {
     }
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+        if(me.getSource()==label[0])
+            System.out.println("works");
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {}
+
+    @Override
+    public void mouseEntered(MouseEvent me) {}
+
+    @Override
+    public void mouseExited(MouseEvent me) {}
     
 }
