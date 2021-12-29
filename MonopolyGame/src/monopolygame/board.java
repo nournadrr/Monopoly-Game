@@ -144,13 +144,10 @@ public class board extends JFrame implements KeyListener,MouseListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent ke) {
-    }
+    public void keyReleased(KeyEvent ke) {}
 
     @Override
-    public void mouseClicked(MouseEvent me) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public void mouseClicked(MouseEvent me) {}
 
     @Override
     public void mousePressed(MouseEvent me) {
