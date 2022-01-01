@@ -69,6 +69,11 @@ public class Game implements Serializable{
             System.out.println("u can only build in a city");
     }
     
+    public static void rolling()
+    {
+        
+    }
+    
     public static  void roll_Dice(Player [] p,Object [] c,int dice,int counter, int i){
         Scanner sc=new Scanner(System.in);
 

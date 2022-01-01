@@ -18,6 +18,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,8 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class board extends JFrame implements KeyListener,MouseListener {
-    ImageIcon  imageicon[];
-    JLabel label[];
+    ImageIcon  imageicon[],dice1imageicon,dice2imageicon;
+    JLabel label[],dice1label,dice2label;
     Image image;
     Image newimg;
     JButton Build,Sell,Morgage,Redeem;
@@ -35,7 +37,7 @@ public class board extends JFrame implements KeyListener,MouseListener {
         addKeyListener(this);        
         setLayout(new BorderLayout());
         setSize(1100,1000);
-        
+        //setResizable(false);
 //        setExtendedState(JFrame.MAXIMIZED_BOTH); 
         //setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,6 +76,7 @@ public class board extends JFrame implements KeyListener,MouseListener {
             image=imageicon[i].getImage();
             newimg=image.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
             imageicon[i]=new ImageIcon(newimg);
+            //label[i].addMouseListener(this);
         }
         for(int j=11-1;j>=0;j--) {
             label[j]=new JLabel();
@@ -111,28 +114,36 @@ public class board extends JFrame implements KeyListener,MouseListener {
         Morgage =new JButton("Morgage");
         Redeem=new JButton("Redeem");
         Build.setPreferredSize(new Dimension(0,70));
-        down.add(Build);
+        down.add(Build); // add action listner in buttons
         down.add(Sell);
         down.add(Morgage);
         down.add(Redeem);
+        
+        
+        dice1imageicon =new ImageIcon("src\\images\\dice6.PNG");
+        image =dice1imageicon.getImage();
+        newimg=image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
+        dice1imageicon=new ImageIcon(newimg);
+        dice1label=new JLabel();
+        dice1label.setIcon(dice1imageicon);
+        down.add(dice1label);
+        
+        dice2imageicon =new ImageIcon("src\\images\\dice6.PNG");
+        image =dice2imageicon.getImage();
+        newimg=image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
+        dice2imageicon=new ImageIcon(newimg);
+        dice2label=new JLabel();
+        dice2label.setIcon(dice1imageicon);
+        down.add(dice2label);
+           
+        dice2label.addMouseListener(this);
+        dice1label.addMouseListener(this);
+        
+        
         add(down,BorderLayout.SOUTH);
-                
         add(new JLabel("hiiii"),BorderLayout.EAST);// players details
         setVisible(true);
-    }
-    
-    
-     
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    }    
     
     @Override
     public void keyTyped(KeyEvent ke) {}
@@ -153,6 +164,12 @@ public class board extends JFrame implements KeyListener,MouseListener {
     public void mousePressed(MouseEvent me) {
         if(me.getSource()==label[0])
             System.out.println("works");
+        
+        if(me.getSource()==dice1label||me.getSource()==dice2label)
+        {
+            //for(int i=0;i<5;i++)
+                randomizeimages(5);
+        }
     }
 
     @Override
@@ -164,4 +181,25 @@ public class board extends JFrame implements KeyListener,MouseListener {
     @Override
     public void mouseExited(MouseEvent me) {}
     
+    public void randomizeimages(int x)
+    {
+        System.out.println("hellooo");
+        int ran1,ran2;
+        
+        ran1=(int)(Math.random()*5+2);
+        dice1imageicon =new ImageIcon("src\\images\\dice"+ran1+".PNG");
+        image =dice1imageicon.getImage();
+        newimg=image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
+        dice1imageicon=new ImageIcon(newimg);
+        dice1label.setIcon(dice1imageicon);
+        
+        ran2=(int)(Math.random()*5+2);
+        dice2imageicon =new ImageIcon("src\\images\\dice"+ran2+".PNG");
+        image =dice2imageicon.getImage();
+        newimg=image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
+        dice2imageicon=new ImageIcon(newimg);
+        dice2label.setIcon(dice2imageicon);
+        
+        System.out.println(ran1+"  "+ ran2);
+    }   
 }
