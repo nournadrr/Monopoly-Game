@@ -13,6 +13,8 @@ import java.awt.FlowLayout;
 import java.awt.GraphicsDevice;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -25,20 +27,24 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
+import java.awt.event.*;
+import javax.swing.*;
 public class board extends JFrame implements KeyListener,MouseListener {
     ImageIcon  imageicon[],dice1imageicon,dice2imageicon;
     JLabel label[],dice1label,dice2label;
     Image image;
     Image newimg;
     JButton Build,Sell,Morgage,Redeem;
+    int x;
     public board() throws IOException {
+         x=5;
         addKeyListener(this);        
         setLayout(new BorderLayout());
         setSize(1100,1000);
-        //setResizable(false);
-//        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        setResizable(false);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH); 
         //setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -164,11 +170,24 @@ public class board extends JFrame implements KeyListener,MouseListener {
     public void mousePressed(MouseEvent me) {
         if(me.getSource()==label[0])
             System.out.println("works");
-        
+        x=15;
         if(me.getSource()==dice1label||me.getSource()==dice2label)
         {
-            //for(int i=0;i<5;i++)
-                randomizeimages(5);
+        
+        
+            Timer timer = new Timer(50, null);
+
+            timer.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    int c=randomizeimages();
+                    System.out.println(c);
+                          if(c==0){
+                               Timer s = (Timer)evt.getSource();
+                                s.stop();
+                          }
+               }
+            });
+            timer.start();
         }
     }
 
@@ -181,8 +200,9 @@ public class board extends JFrame implements KeyListener,MouseListener {
     @Override
     public void mouseExited(MouseEvent me) {}
     
-    public void randomizeimages(int x)
+    public int randomizeimages()
     {
+x--;
         System.out.println("hellooo");
         int ran1,ran2;
         
@@ -199,7 +219,21 @@ public class board extends JFrame implements KeyListener,MouseListener {
         newimg=image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
         dice2imageicon=new ImageIcon(newimg);
         dice2label.setIcon(dice2imageicon);
-        
+                       //  Thread.sleep(1000);
+
         System.out.println(ran1+"  "+ ran2);
+      //  if(x>0)
+        //    randomizeimages(--x);
+        return x;
     }   
+
+    static class ActionListenerImpl implements ActionListener {
+
+        public ActionListenerImpl() {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            // do your reoccuring task
+        }
+    }
 }
