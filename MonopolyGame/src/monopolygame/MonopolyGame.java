@@ -6,7 +6,24 @@ import java.util.*;
 public class MonopolyGame {    
     public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
         
-        new board();
+        Player[] p=new Player[4];
+        p[0]=new Player();
+        p[0].setName("Abdelrahman");
+        p[0].setId(1);
+        p[1]=new Player();
+        p[1].setName("nour");
+        p[1].setId(2);
+        p[2]=new Player();
+        p[2].setName("youssef");
+        p[2].setId(3);
+        p[3]=new Player();
+        p[3].setName("Medo");
+        p[3].setId(4);
+        
+        
+        
+        
+        new board(p);
         
 //        Scanner sc=new Scanner(System.in);
 //        Game game=new Game();
