@@ -24,27 +24,6 @@ public class rightpanel extends JPanel {
     JLabel[] colour;
     public rightpanel(Player[] p) {
         create(p);
-//        setLayout(new GridLayout(4,2,10,10));
-//        //p[0].colour="red";
-//        
-//        //name
-//        //balance
-//        //colour
-//        
-//        JLabel Name=new JLabel("Name: ");
-//        JLabel getname=new JLabel(p[0].getName());
-//        
-//        JLabel balance=new JLabel("Balance: ");
-//        JLabel getbalance=new JLabel(Integer.toString(p[0].getBalance()));
-//        
-//        
-//         colour=new JLabel();
-//         
-//         add(Name);
-//         add(getname);
-//         add(balance);
-//         add(getbalance);
-//         add(colour);
     }
     public JPanel create(Player[] p) {
         setLayout(new GridLayout(2,4,0,0));
@@ -57,10 +36,7 @@ public class rightpanel extends JPanel {
             balance[i]=new JLabel(Integer.toString(p[i].getBalance()),SwingConstants.CENTER);
             name[i].setFont(new Font("Serif", Font.BOLD, 18));
             balance[i].setFont(new Font("Serif", Font.BOLD, 18));
-            //colour[i]=new JLabel();
             add(name[i]);
-            //add(balance[i]);
-
         }
         
         for(int i=0;i<4;i++)
@@ -71,7 +47,6 @@ public class rightpanel extends JPanel {
         name[0].setOpaque(true);
         balance[0].setBackground(redColor);
         balance[0].setOpaque(true);
-        
         name[1].setBackground(Color.CYAN);
         name[1].setOpaque(true);
         balance[1].setBackground(Color.cyan);

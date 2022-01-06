@@ -21,9 +21,9 @@ public class MonopolyGame {
         p[3].setId(4);
         
         
-        
-        
-        new board(p);
+         Object[] c=null;
+        c=Game.loadProperty(c);
+        new board(p,c);
         
 //        Scanner sc=new Scanner(System.in);
 //        Game game=new Game();
