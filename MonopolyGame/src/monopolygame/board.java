@@ -9,9 +9,11 @@ import java.awt.*;
 import java.io.IOException;
 import javax.swing.*;
 import java.awt.event.*;
+import static java.lang.Thread.sleep;
 import java.util.logging.*;
 
 public class board extends JFrame implements KeyListener, MouseListener {
+    JPanel left;
     ImageIcon imageicon[], dice1imageicon, dice2imageicon;
     JLabel label[], dice1label, dice2label;
     JLabel leftcolour,buyingprice,rent[],houseprice;
@@ -167,18 +169,22 @@ public class board extends JFrame implements KeyListener, MouseListener {
 //            left.add(rent[i]);
 //        left.add(houseprice);
 //        add(left,BorderLayout.WEST);
+        left=new JPanel(new GridLayout(8,1,0,0));//up,left,down,right
         leftdata(0);
        ////////////////////////////////////////////////////////////////////////////////////////
-        
+        add(left,BorderLayout.WEST);
         setVisible(true);
     }
     
     public void leftdata(int s) {
-        JPanel left=new JPanel(new GridLayout(8,1,0,0));//up,left,down,right
+//        left=new JPanel(new GridLayout(8,1,0,0));//up,left,down,right
 //        left.setBorder(BorderFactory.createEmptyBorder(20, 49, 20, 220));
+        left.removeAll();  
+        left.setPreferredSize(new Dimension(250, 20));
         if(s==0)
         {
             JLabel start=new JLabel("MONOPOLY",SwingConstants.CENTER);
+
             start.setFont(new Font("Serif", Font.BOLD, 14));
             start.setOpaque(true);
             start.setBackground(Color.white);
@@ -192,9 +198,56 @@ public class board extends JFrame implements KeyListener, MouseListener {
             
             left.add(start);
             left.add(get);
-            add(left,BorderLayout.WEST);
+//            left.revalidate();
+//            left.repaint();
         }
-        else
+        else if(s==10||s==30)//jail
+        {
+            leftcolour=new JLabel("Jail Area",SwingConstants.CENTER);
+            leftcolour.setFont(new Font("Serif", Font.BOLD, 18));
+            leftcolour.setOpaque(true);
+            leftcolour.setBackground(Color.white);
+//            leftcolour.setForeground(Color.white);
+
+            left.add(leftcolour);
+        }
+        else if(s==2||s==7||s==17||s==22||s==33||s==36)//lucly
+        {
+            leftcolour=new JLabel("Wait for your lucky card",SwingConstants.CENTER);
+            leftcolour.setFont(new Font("Serif", Font.BOLD, 18));
+            leftcolour.setOpaque(true);
+            leftcolour.setBackground(Color.white);
+//            leftcolour.setForeground(Color.white);
+
+            left.add(leftcolour);
+        }
+        else if(s==20)//waiting
+        {
+            leftcolour=new JLabel("The Waiting Area",SwingConstants.CENTER);
+            leftcolour.setFont(new Font("Serif", Font.BOLD, 18));
+            leftcolour.setOpaque(true);
+            leftcolour.setBackground(Color.white);
+//            leftcolour.setForeground(Color.white);
+
+            left.add(leftcolour);
+        }
+        else if(s==4||s==38)//tax
+        {
+            leftcolour=new JLabel("Tax Area",SwingConstants.CENTER);
+            leftcolour.setFont(new Font("Serif", Font.BOLD, 18));
+            leftcolour.setOpaque(true);
+            leftcolour.setBackground(Color.white);
+//            leftcolour.setForeground(Color.white);
+
+            JLabel x=new JLabel("You Must pay");
+            x.setFont(new Font("Serif", Font.BOLD, 18));
+            x.setOpaque(true);
+            x.setBackground(Color.white);
+
+            left.add(leftcolour);
+            left.add(x);
+        }
+        else //properties
         {
             for(int i=0;i<property.length;i++)
             {
@@ -203,8 +256,7 @@ public class board extends JFrame implements KeyListener, MouseListener {
                     //leftcolour,buyingprice,rent[],houseprice;
                     if(property[i].getClass().getName().equalsIgnoreCase("monopolygame.Cities"))
                     {                      
-                        System.out.println(property[i].getClass().getName());
-
+//                        System.out.println(property[i].getClass().getName());
                         Cities c=(Cities)property[i];
                         leftcolour=new JLabel(c.getName(),SwingConstants.CENTER);
                         leftcolour.setFont(new Font("Serif", Font.BOLD, 18));
@@ -253,23 +305,69 @@ public class board extends JFrame implements KeyListener, MouseListener {
                         for(int j=0;j<rent.length;j++)
                             left.add(rent[j]);
                         left.add(houseprice);
-                        add(left,BorderLayout.WEST);
+//                        left.revalidate();
+//                        left.repaint();
                     }
                     
                     
                     
-                    else if(property[i].getClass().getName().equalsIgnoreCase("Train"))
+                    else if(property[i].getClass().getName().equalsIgnoreCase("monopolygame.Train"))
                     {
+                        Train t=(Train)property[i];
+                        leftcolour=new JLabel(t.getName(),SwingConstants.CENTER);
+                        leftcolour.setFont(new Font("Serif", Font.BOLD, 18));
+                        leftcolour.setOpaque(true);
+                        leftcolour.setBackground(Color.BLACK);
+                        leftcolour.setForeground(Color.white);
+                        
+                        left.add(leftcolour);
+                        String text="Price: "+t.getPrice();
+                        buyingprice=new JLabel(text);
+                        left.add(buyingprice);
+                        
+                        rent=new JLabel[4];
+                        text="Rent with 1 house: 25";
+                        rent[0]=new JLabel(text);
+                        text="Rent with 2 house: 50";
+                        rent[1]=new JLabel(text);
+                        text="Rent with 3 house: 100";
+                        rent[2]=new JLabel(text);
+                        text="Rent with 4 house: 200";
+                        rent[3]=new JLabel(text);
+                        
+                        for(int j=0;j<rent.length;j++)
+                            left.add(rent[j]);
                         
                     }
-                    else if(property[i].getClass().getName().equalsIgnoreCase("waterandelec"))
+                    else if(property[i].getClass().getName().equalsIgnoreCase("monopolygame.waterandelec"))
                     {
+                        waterandelec w=(waterandelec)property[i];
+                        leftcolour=new JLabel(w.getName(),SwingConstants.CENTER);
+                        leftcolour.setFont(new Font("Serif", Font.BOLD, 18));
+                        leftcolour.setOpaque(true);
+                        leftcolour.setBackground(Color.darkGray);
+                        leftcolour.setForeground(Color.white);
                         
+                        left.add(leftcolour);
+                        String text="Price: "+w.getPrice();
+                        buyingprice=new JLabel(text);
+                        left.add(buyingprice);
+                        
+                        rent=new JLabel[2];
+                        text="if 1 owned -> rent is 4*dice";
+                        rent[0]=new JLabel(text);
+                        text="if 1 owned -> rent is 10*dice";
+                        rent[1]=new JLabel(text);
+                        
+                        
+                        for(int j=0;j<rent.length;j++)
+                            left.add(rent[j]);
                     }
                 }
             }
         }
-        ////////////////////////////////////////////////////////
+        left.revalidate();
+        left.repaint();
     }
 
     @Override
@@ -293,20 +391,20 @@ public class board extends JFrame implements KeyListener, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent me) {
-        Thread w=new Thread()
-        {
-            public void run() 
-                {
-                    for(int i=0;i<label.length;i++)
+//        Thread w=new Thread()
+//        {
+//            public void run() 
+//                {
+                    for(int s=0;s<label.length;s++)
                     {
-                        if(me.getSource()==label[i])
+                        if(me.getSource()==label[s])
                         {
-                            leftdata(i);
+                            leftdata(s);
                         }
                     }
-                }
-        };
-        w.start();
+//                }
+//        };
+//        w.start();
 //        if (me.getSource() == label[0]) {
 //            System.out.println("works");
 //        }
@@ -314,7 +412,17 @@ public class board extends JFrame implements KeyListener, MouseListener {
         
         
         
-        
+//        if(me.getSource()==label[1])
+//        {
+//            Thread t = new Thread() 
+//            {
+//                public void run() 
+//                {
+//                    leftdata(1);
+//                }
+//            };
+//            t.start();
+//        }
         
         
         if (me.getSource() == dice1label || me.getSource() == dice2label) 
