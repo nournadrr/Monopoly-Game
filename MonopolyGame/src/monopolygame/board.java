@@ -28,10 +28,10 @@ public class board extends JFrame implements KeyListener, MouseListener {
         this.property=property;
         addKeyListener(this);
         setLayout(new BorderLayout());
-        setSize(1100, 1000);
+        setSize(1330, 1010);
         setResizable(false);
-        setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        //setUndecorated(true);
+//        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+//        setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel south = new JPanel();
