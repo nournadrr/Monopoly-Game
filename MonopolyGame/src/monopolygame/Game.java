@@ -12,7 +12,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 public class Game implements Serializable{
 //    Scanner in=new Scanner(System.in);
-    
+    private static Player[] p=new Player[4];
+    private static String[] filenames=new String[5];
     
 //    public void buyMortage(Player p)
 //    {
@@ -69,12 +70,16 @@ public class Game implements Serializable{
             System.out.println("u can only build in a city");
     }
     
+//<<<<<<< board
     public static void rolling()
     {
         
     }
     
     public static  void roll_Dice(Player [] p,Object [] c,int dice,int counter, int i){
+//=======
+  //  public static  void roll_Dice(Object [] c,int dice,int counter, int i){
+//>>>>>>> master
         Scanner sc=new Scanner(System.in);
 
         Taxes[] ta=new Taxes[2];
@@ -211,5 +216,55 @@ public class Game implements Serializable{
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));
         out.writeObject(c);
         out.close();
+    }
+    public void saveNewGame(String name) throws FileNotFoundException, IOException, ClassNotFoundException
+    {
+        name=name+".bin";
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));
+        out.writeObject(p);
+        out.close();
+        
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(name));
+        Player[] player1=new Player[4];
+        player1=(Player[])in.readObject();
+        filenames[0]=name;
+        System.out.println("file name: "+name);
+        for(int i=0;i<player1.length;i++)
+        {
+            System.out.println("Player: "+player1[i].getName());
+        }
+        
+    }
+    public void loadgame(String name) throws FileNotFoundException, IOException, ClassNotFoundException
+    {
+        for(int i=0;i<filenames.length;i++)
+        {
+            //System.out.println("nour");
+            if(name.equals(filenames[i]))
+            {
+                //System.out.println("nour");
+                ObjectInputStream in = new ObjectInputStream(new FileInputStream(name));
+                Player[] player2=new Player[4];
+                player2=(Player[])in.readObject();
+                System.out.println("file name: "+name);
+                for(int j=0;j<player2.length;j++)
+                {
+                    System.out.println("Player: "+player2[j].getName());
+                }
+            }
+        }
+    }
+    public void newgame(Player[] p,String name) throws IOException, FileNotFoundException, ClassNotFoundException
+    {
+        this.p=p;
+        saveNewGame(name);
+    }
+    
+    public void returnPlayers()
+    {
+        for(int i=0;i<p.length;i++)
+        {
+            System.out.println("Player: "+p[i].getName());
+        }
     }
 }

@@ -21,6 +21,7 @@ public class MonopolyGame {
         p[3].setId(4);
         
         
+//<<<<<<< board
          Object[] c=null;
         c=Game.loadProperty(c);
         new board(p,c);
@@ -53,6 +54,43 @@ public class MonopolyGame {
 //            p[2].setName("youssef");
 //            p[2].setId(3);
 //        }
+//=======
+//        
+//        Game.saveProperty(s);
+       
+        
+        
+        //ArrayList<Object> arraylist=new ArrayList<>();
+//                Scanner sc=new Scanner(System.in);
+//                Game game=new Game();
+                Player[] p=null;
+//                Object[] c=null;//=new Property[28];
+//
+//              System.out.println("enter 1 for new game or 2 to load a game");
+//                int choose =sc.nextInt();
+//               if(choose==2)
+//               {
+//                    Game.loadProperty(c);
+//                    p=Game.loadPlayer(p);
+//                    System.out.println(p[1].getName()+" "+p[0].getName());
+//                }
+//                else
+//                {
+//                    //Property.readFromfile(arraylist);
+//                    c=Game.loadProperty(c);
+//                    System.out.println(((Property)c[18]).getName());
+//                    p=new Player[3];
+//                    p[0]=new Player();
+//                    p[0].setName("abdo");
+//                    p[0].setId(1);
+//                    p[1]=new Player();
+//                    p[1].setName("nour");
+//                    p[1].setId(2);
+//                    p[2]=new Player();
+//                    p[2].setName("youssef");
+//                    p[2].setId(3);
+//                }
+//>>>>>>> master
 //        Chances []chance=new Chances[6];
 //        chance[0]=new Chances(2);
 //        chance[1]=new Chances(7);
@@ -60,7 +98,19 @@ public class MonopolyGame {
 //        chance[3]=new Chances(22);
 //        chance[4]=new Chances(33);
 //        chance[5]=new Chances(36);
+//<<<<<<< board
 //       
+//=======
+//        
+//
+//       System.out.println(p[1].getName());
+//  
+//        
+//        
+//
+//        
+//        
+//>>>>>>> master
 //        int dice=0,turnchoice, counter=0;
 //        
 //        while(true)//Player.getNoOfPlayers()>1)
@@ -100,7 +150,19 @@ public class MonopolyGame {
 //                            exit(0);
 //                    }
 //                }while(!endGame && (turnchoice!=5||turnchoice!=4||(dice==12&&counter<=3)));
+//<<<<<<< board
 //            }
 //        }        
+//=======
+//            }  
+//        }   
+
+ //                 new graphics();
+                  //Game game=new Game();
+//                  newgame n=new newgame();
+                  //p=newgame.addPlayers();
+//                  game.returnPlayers();
+                   //p=newgame.addPlayers();
+//>>>>>>> master
     }    
 }
