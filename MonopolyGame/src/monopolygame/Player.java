@@ -24,6 +24,7 @@ public class Player implements Serializable{
     private int balance;
     private boolean jailCard;
     private int jailtime;
+    String colour;
     
     public Player()
     {
