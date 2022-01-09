@@ -146,7 +146,7 @@ public class Game implements Serializable{
                        {
                            p[i].decrementBalance(((Property)c[j]).getPrice());
                            ((Property)c[j]).setOwnerid(i);
-                           p[i].setProperties(c[j]);
+                          // p[i].setProperties(c[j]);
                        }
                    }
                }

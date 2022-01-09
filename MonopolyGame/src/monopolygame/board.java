@@ -10,16 +10,17 @@ import java.io.IOException;
 import javax.swing.*;
 import java.awt.event.*;
 import static java.lang.Thread.sleep;
+import java.util.Iterator;
 import java.util.logging.*;
 
-public class board extends JFrame implements KeyListener, MouseListener,ActionListener {
+public class board extends JFrame implements KeyListener, MouseListener, ActionListener {
 
-    JPanel left, down, board, up;
+    JPanel left, down, board, up, right;
     ImageIcon imageicon[], dice1imageicon, dice2imageicon; //board images
     JLabel label[], dice1label, dice2label;//board &dice
     JLabel leftcolour, buyingprice, rent[], houseprice; //leftdata
     Image image, newimg;
-    JButton Build, Sell, Morgage, Redeem,rolldice,endturn;//downdata
+    JButton Build, Sell, Morgage, Redeem, rolldice, endturn;//downdata
     Player[] players;
     Object[] property;
     JLabel[] name;//up_data
@@ -27,14 +28,15 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
     JLabel[] colour;//up_data
 
     JLabel movingplayers[];
-    
-    
-    int counterfordice=0;// for multiple rolling dice
-    int currentplayer=0;
-    
+
+    int counterfordice = 0;// for multiple rolling dice
+    int currentplayer = 0;
+
     public board(Player[] p, Object[] property) throws IOException {
         down = new JPanel(new GridLayout(1, 4, 20, 5));//up,left,down,right
         down.setBorder(BorderFactory.createEmptyBorder(20, 49, 20, 20));
+        up = new JPanel(new GridLayout(2, 4, 0, 0));
+        right = new JPanel();
 
         players = p;
         this.property = property;
@@ -54,7 +56,8 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
         left = new JPanel(new GridLayout(9, 1, 0, 0));//up,left,down,right
         leftdata(0);// adding leftdata
         add(left, BorderLayout.WEST);
-
+        rightdata(0);//adding properties of players
+        add(right,BorderLayout.EAST);
         setplayersonboard();
         setVisible(true);
     }
@@ -66,31 +69,18 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
         movingplayers[0].setOpaque(true);
         movingplayers[0].setBounds(10, 10, 60, 80);
         label[0].add(movingplayers[0]);
-
-        
-//        if(currentplayer==0)
-//            turn.setBackground(new Color(255,204,203));
-//        else if(currentplayer==1)
-//            turn.setBackground(Color.CYAN);
-//        else if(currentplayer==2)
-//            turn.setBackground(new Color(255,255,153));
-//        else if(currentplayer==3)
-//            turn.setBackground(new Color(144,238,144));
-
-        movingplayers[1]=new JLabel();
+        movingplayers[1] = new JLabel();
         movingplayers[1].setBackground(Color.CYAN);
         movingplayers[1].setOpaque(true);
         movingplayers[1].setBounds(10, 10, 60, 80);
         label[0].add(movingplayers[1]);
-//        
-        movingplayers[2]=new JLabel();
-        movingplayers[2].setBackground(new Color(255,255,153));
+        movingplayers[2] = new JLabel();
+        movingplayers[2].setBackground(new Color(255, 255, 153));
         movingplayers[2].setOpaque(true);
         movingplayers[2].setBounds(10, 10, 60, 80);
         label[0].add(movingplayers[2]);
-//        
-        movingplayers[3]=new JLabel();
-        movingplayers[3].setBackground(new Color(144,238,144));
+        movingplayers[3] = new JLabel();
+        movingplayers[3].setBackground(new Color(144, 238, 144));
         movingplayers[3].setOpaque(true);
         movingplayers[3].setBounds(10, 10, 60, 80);
         label[0].add(movingplayers[3]);
@@ -112,9 +102,63 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
                     label[players[currentplayer].getCurrentLocation()].add(movingplayers[currentplayer]);
                     label[players[currentplayer].getCurrentLocation()].repaint();
                 }
+                buyingproperty();
             }
         };
         t.start();
+    }
+
+    public void buyingproperty() {
+        int currentlocation = players[currentplayer].getCurrentLocation();
+        int propertylocation=0;
+//        for(int i=0;i<property.length;i++)
+//        {
+//            if(currentlocation==((Property)property[i]).getID())
+//                propertylocation=i;
+//        }
+        
+
+        if (currentlocation == 0 || currentlocation == 2 || currentlocation == 4 || currentlocation == 7 || currentlocation == 10
+                || currentlocation == 17 || currentlocation == 20 || currentlocation == 22 || currentlocation == 30
+                || currentlocation == 33 || currentlocation == 36 || currentlocation == 38) {
+            return;
+        }
+        for (int i = 0; i < property.length; i++) {
+            if (((Property) property[i]).getID() == currentlocation) {
+//                c = ((Property) property[i]);
+                propertylocation=i;
+            }
+        }
+        Property c = (Property)property[propertylocation];
+        if (players[currentplayer].getBalance() > c.getPrice()) 
+        {
+            if(((Property) property[propertylocation]).getOwnerid() == -1)
+            {
+                String[] options = {"yes", "no"}; //// setting for buying a property
+                if (JOptionPane.showOptionDialog(null, "Do you want to buy this property", "Click a button",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0) {
+                    players[currentplayer].decrementBalance(((Property) property[propertylocation]).getPrice());
+                    c.setOwnerid(currentplayer);
+                    players[currentplayer].addProperties(c.getID());
+    //                System.out.println(c.getID());
+                    leftdata(players[currentplayer].getCurrentLocation());
+                    up_data();
+                }
+            }
+            else
+            {
+                String[] options = {"Owner: "+players[c.getOwnerid()].getName()}; //// setting for buying a property
+                JOptionPane.showOptionDialog(null,"Pay : "+c.getRent(), "Click a button",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                players[currentplayer].decrementBalance(c.getRent());
+                players[c.getOwnerid()].incrementBalance(c.getRent());
+//                c.setOwnerid(currentplayer);
+                leftdata(players[currentplayer].getCurrentLocation());
+                up_data();
+            }
+        }
+        
+        rightdata(currentplayer);
     }
 
     @Override
@@ -144,51 +188,50 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
             }
         }
 
-        if(me.getSource()==rolldice) {
+        if (me.getSource() == rolldice) {
             Thread t = new Thread() {
                 public void run() {
                     int ran1 = 0, ran2 = 0;
                     int i;
-                        i=0;
-                        while (i < 13) {
-                            try {
-                                sleep(50);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(board.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            ran1 = (int) (Math.random() * 6 + 1);
-                            dice1imageicon = new ImageIcon("src\\images\\dice" + ran1 + ".PNG");
-                            image = dice1imageicon.getImage();
-                            newimg = image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
-                            dice1imageicon = new ImageIcon(newimg);
-                            dice1label.setIcon(dice1imageicon);
-
-                            ran2 = (int) (Math.random() * 6 + 1);
-                            dice2imageicon = new ImageIcon("src\\images\\dice" + ran2 + ".PNG");
-                            image = dice2imageicon.getImage();
-                            newimg = image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
-                            dice2imageicon = new ImageIcon(newimg);
-                            dice2label.setIcon(dice2imageicon);
-                            i++;
+                    i = 0;
+                    while (i < 13) {
+                        try {
+                            sleep(50);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(board.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        movingplayer(ran1 + ran2);
-                        counterfordice++;
-                    if(ran1!=ran2||counterfordice>2)
-                    {
-                        counterfordice=0;
+                        ran1 = (int) (Math.random() * 6 + 1);
+                        dice1imageicon = new ImageIcon("src\\images\\dice" + ran1 + ".PNG");
+                        image = dice1imageicon.getImage();
+                        newimg = image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
+                        dice1imageicon = new ImageIcon(newimg);
+                        dice1label.setIcon(dice1imageicon);
+
+                        ran2 = (int) (Math.random() * 6 + 1);
+                        dice2imageicon = new ImageIcon("src\\images\\dice" + ran2 + ".PNG");
+                        image = dice2imageicon.getImage();
+                        newimg = image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
+                        dice2imageicon = new ImageIcon(newimg);
+                        dice2label.setIcon(dice2imageicon);
+                        i++;
+                    }
+                    movingplayer(ran1 + ran2);
+                    counterfordice++;
+
+                    if (ran1 != ran2 || counterfordice > 2) {
+                        counterfordice = 0;
                         rolldice.setEnabled(false);
                         endturn.setEnabled(true);
-                    }                        
+                    }
                 }//end of run function
             };
             t.start();
         }
-        
-        if(me.getSource()==endturn)
-        {
-            Thread t=new Thread(){
-                public void run(){
-                    currentplayer=(currentplayer+1)%4;
+
+        if (me.getSource() == endturn) {
+            Thread t = new Thread() {
+                public void run() {
+                    currentplayer = (currentplayer + 1) % 4;
                     endturn.setEnabled(false);
                     rolldice.setEnabled(true);
                     downdata();
@@ -210,6 +253,65 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
     @Override
     public void mouseExited(MouseEvent me) {
     }
+
+    public void rightdata(int player) {
+        right.removeAll();
+        right.setPreferredSize(new Dimension(250, 20));
+
+        Iterator<Integer> it = players[player].getProperties().iterator();
+        int size = players[player].getProperties().size();
+        JLabel data[] = new JLabel[size];
+        for (int i = 0; i < size; i++) {
+            int loc=it.next();
+            Object c=null;
+            for(int j=0;j<property.length;j++)
+            {
+                if(loc==((Property)property[j]).getID())
+                    c=(Property)property[j];
+            }
+            System.out.println(((Property)c).getName());
+            data[i]=new JLabel(((Property)c).getName(),SwingUtilities.CENTER);
+            data[i].setOpaque(true);
+            data[i].setFont(new Font("Serif", Font.BOLD, 12));
+            
+            if (c.getClass().getName().equalsIgnoreCase("monopolygame.Cities")) {
+                if (((Property)c).getColor().equalsIgnoreCase("brown")) {
+                    Color loon = new Color(181, 101, 29);
+                    data[i].setBackground(loon);
+                } else if (((Property)c).getColor().equalsIgnoreCase("blue")) {
+                    data[i].setBackground(Color.cyan);
+                } else if (((Property)c).getColor().equalsIgnoreCase("pink")) {
+                    data[i].setBackground(Color.pink);
+                } else if (((Property)c).getColor().equalsIgnoreCase("orange")) {
+                    data[i].setBackground(Color.orange);
+                } else if (((Property)c).getColor().equalsIgnoreCase("red")) {
+                    data[i].setBackground(Color.red);
+                } else if (((Property)c).getColor().equalsIgnoreCase("yellow")) {
+                    data[i].setBackground(Color.yellow);
+                } else if (((Property)c).getColor().equalsIgnoreCase("green")) {
+                    data[i].setBackground(Color.GREEN);
+                } else if (((Property)c).getColor().equalsIgnoreCase("darkblue")) {
+                    data[i].setBackground(Color.BLUE);
+                } else {
+                    data[i].setBackground(Color.white);
+                }
+
+                if (c.getClass().getName().equalsIgnoreCase("monopolygame.Train")) {
+                    data[i].setBackground(Color.BLACK);
+                    data[i].setForeground(Color.white);
+                } else if (property[i].getClass().getName().equalsIgnoreCase("monopolygame.waterandelec")) {
+                    data[i].setBackground(Color.darkGray);
+                    data[i].setForeground(Color.white);
+                }
+                right.add(data[i]);
+            }
+            right.revalidate();
+            right.repaint();
+        }
+    }
+    
+    
+    
 
     public void leftdata(int s) {
 //        left=new JPanel(new GridLayout(8,1,0,0));//up,left,down,right
@@ -368,24 +470,25 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
                         }
                     }
                     String own;
-                    int ownerid=-1;
-                    if(((Property)property[i]).getOwnerid()==-1)
-                        own="No Owner";
-                    else
-                    {
-                        ownerid=((Property)property[i]).getOwnerid();
-                        own=players[ownerid].getName();                        
+                    int ownerid = ((Property) property[i]).getOwnerid();
+                    System.out.println(((Property) property[i]).getName() + "  " + ownerid);
+                    if (ownerid == -1) {
+                        own = "No Owner";
+                    } else {
+                        ownerid = ((Property) property[i]).getOwnerid();
+                        own = "Owner: " + players[ownerid].getName();
                     }
-                    JLabel ownerlabel =new JLabel(own,SwingUtilities.CENTER);
+                    JLabel ownerlabel = new JLabel(own, SwingUtilities.CENTER);
                     ownerlabel.setFont(new Font("Serif", Font.BOLD, 22));
-                    if(ownerid==0)
-                        ownerlabel.setBackground(new Color(255,204,203));
-                    else if(ownerid==1)
+                    if (ownerid == 0) {
+                        ownerlabel.setBackground(new Color(255, 204, 203));
+                    } else if (ownerid == 1) {
                         ownerlabel.setBackground(Color.CYAN);
-                    else if(ownerid==2)
-                        ownerlabel.setBackground(new Color(255,255,153));
-                    else if(ownerid==3)
-                        ownerlabel.setBackground(new Color(144,238,144));
+                    } else if (ownerid == 2) {
+                        ownerlabel.setBackground(new Color(255, 255, 153));
+                    } else if (ownerid == 3) {
+                        ownerlabel.setBackground(new Color(144, 238, 144));
+                    }
                     ownerlabel.setOpaque(true);
                     left.add(ownerlabel);
                 }
@@ -402,33 +505,33 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
         Sell = new JButton("Sell");
         Morgage = new JButton("Morgage");
         Redeem = new JButton("Redeem");
-        rolldice=new JButton("Roll Dice");
-        endturn=new JButton("End Turn");
+        rolldice = new JButton("Roll Dice");
+        endturn = new JButton("End Turn");
 //        Build.setPreferredSize(new Dimension(220, 70));
 //        Build.setBounds(10, 10, 60, 80);
-        
 
         dice1imageicon = new ImageIcon("src\\images\\dice6.PNG");
         image = dice1imageicon.getImage();
         newimg = image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
         dice1imageicon = new ImageIcon(newimg);
-        
-        dice1label = new JLabel(dice1imageicon,SwingUtilities.CENTER);
-        dice2label = new JLabel(dice1imageicon,SwingUtilities.CENTER);
-        
-        JLabel turn =new JLabel(players[currentplayer].getName(),SwingUtilities.CENTER);
+
+        dice1label = new JLabel(dice1imageicon, SwingUtilities.CENTER);
+        dice2label = new JLabel(dice1imageicon, SwingUtilities.CENTER);
+
+        JLabel turn = new JLabel(players[currentplayer].getName(), SwingUtilities.CENTER);
         turn.setFont(new Font("Serif", Font.BOLD, 12));
-        if(currentplayer==0)
-            turn.setBackground(new Color(255,204,203));
-        else if(currentplayer==1)
+        if (currentplayer == 0) {
+            turn.setBackground(new Color(255, 204, 203));
+        } else if (currentplayer == 1) {
             turn.setBackground(Color.CYAN);
-        else if(currentplayer==2)
-            turn.setBackground(new Color(255,255,153));
-        else if(currentplayer==3)
-            turn.setBackground(new Color(144,238,144));
+        } else if (currentplayer == 2) {
+            turn.setBackground(new Color(255, 255, 153));
+        } else if (currentplayer == 3) {
+            turn.setBackground(new Color(144, 238, 144));
+        }
         turn.setOpaque(true);
         down.add(turn);
-        
+
         down.add(Build); // add action listner in buttons
         down.add(Sell);
         down.add(Morgage);
@@ -444,7 +547,7 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
         Morgage.setEnabled(false);
         Redeem.setEnabled(false);
         endturn.setEnabled(false);
-        
+
         rolldice.addMouseListener(this);
         endturn.addMouseListener(this);
         down.revalidate();
@@ -519,7 +622,7 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
     }
 
     public void up_data() {
-        up = new JPanel(new GridLayout(2, 4, 0, 0));
+        up.removeAll();
         name = new JLabel[4];
         balance = new JLabel[4];
         colour = new JLabel[4];
@@ -556,10 +659,13 @@ public class board extends JFrame implements KeyListener, MouseListener,ActionLi
         name[3].setOpaque(true);
         balance[3].setBackground(lightgreen);
         balance[3].setOpaque(true);
+
+        up.revalidate();
+        up.repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        
+
     }
 }
