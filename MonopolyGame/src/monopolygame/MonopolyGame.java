@@ -24,6 +24,8 @@ public class MonopolyGame {
 //<<<<<<< board
          Object[] c=null;
         c=Game.loadProperty(c);
+        for(int i=0;i<c.length;i++)
+            ((Property)c[i]).setOwnerid(-1);
         new board(p,c);
         
 //        Scanner sc=new Scanner(System.in);
@@ -63,7 +65,7 @@ public class MonopolyGame {
         //ArrayList<Object> arraylist=new ArrayList<>();
 //                Scanner sc=new Scanner(System.in);
 //                Game game=new Game();
-                Player[] p=null;
+                //Player[] p=null;
 //                Object[] c=null;//=new Property[28];
 //
 //              System.out.println("enter 1 for new game or 2 to load a game");

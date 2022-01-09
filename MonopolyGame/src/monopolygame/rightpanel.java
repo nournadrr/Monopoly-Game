@@ -63,54 +63,6 @@ public class rightpanel extends JPanel {
         name[3].setOpaque(true);
         balance[3].setBackground(lightgreen);
         balance[3].setOpaque(true);
-//        colour[0].setBackground(Color.yellow);
-//        colour[0].setOpaque(true);
-        
-        //p[0].colour="red";
-        
-        //name
-        //balance
-        //colour
-        
-        //JLabel Name=new JLabel("Name: ");
-        //JLabel getname=new JLabel("abdo");
-        
-        //JLabel balance=new JLabel("Balance: ");
-        //JLabel getbalance=new JLabel("1500");
-        
-        
-         //colour=new JLabel();
-         
-         
-         //Name.setPreferredSize(new Dimension(100, 1000));
-         //Name.setForeground(Color.red);
-         //Name.setBackground(Color.yellow);
-         //Name.setOpaque(true);
-//         getname.setPreferredSize(new Dimension(100, 30));
-//         balance.setPreferredSize(new Dimension(100, 30));
-//         getbalance.setPreferredSize(new Dimension(100, 30));
-//         colour.setPreferredSize(new Dimension(100, 30));
-//         //add(Name);
-//         add(getname);
-//         add(balance);
-//         add(getbalance);
-//         add(colour);
          return this;
     }
-    
-    public void paint(Graphics g) {
-        super.paint(g);
-//        g.setColor(Color.red);
-//        g.fillOval(colour[0].getX(), colour[0].getY()+80, 30, 40);
-//        
-//        g.setColor(Color.green);
-//        g.fillOval(colour[1].getX(), colour[1].getY()+80, 30, 40);
-//        
-//        g.setColor(Color.blue);
-//        g.fillOval(colour[2].getX(), colour[2].getY()+80, 30, 40);
-//        
-//        g.setColor(Color.yellow);
-//        g.fillOval(colour[3].getX(), colour[3].getY()+80, 30, 40);
-    }
-    
 }

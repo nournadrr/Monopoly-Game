@@ -61,14 +61,15 @@ public class Player implements Serializable{
     }
     public void incrementCurrentLocation(int dice)
     {
-        for(int i=0;i<dice;i++)
-        {
-            currentLocation=(currentLocation+1)%39;
-            if(currentLocation==0)
-                incrementBalance(250);
-        }
-        if(currentLocation==30)
-            isJail=true;
+        currentLocation=(currentLocation+dice)%40;
+//        for(int i=0;i<dice;i++)
+//        {
+//            currentLocation=(currentLocation+1)%39;
+//            if(currentLocation==0)
+//                incrementBalance(250);
+//        }
+//        if(currentLocation==30)
+//            isJail=true;
     }
 
     public void setName(String name)
