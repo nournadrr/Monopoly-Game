@@ -25,7 +25,6 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
     Object[] property;
     JLabel[] name;//up_data
     JLabel[] balance;//up_data
-    JLabel[] colour;//up_data
 
     JLabel movingplayers[];
 
@@ -187,6 +186,15 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                 leftdata(s);
             }
         }
+        
+        for(int i=0;i<name.length;i++)
+        {
+            if(me.getSource()==name[i]||me.getSource()==balance[i])
+            {
+                rightdata(i);
+                System.out.println("yes");
+            }
+        }
 
         if (me.getSource() == rolldice) {
             Thread t = new Thread() {
@@ -255,13 +263,23 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
     }
 
     public void rightdata(int player) {
+//        System.out.println("hello");
         right.removeAll();
         right.setPreferredSize(new Dimension(250, 20));
+        
+        JLabel p = new JLabel("Properties of: "+players[player].getName(), SwingConstants.CENTER);
+        p.setFont(new Font("Serif", Font.BOLD, 14));
+        p.setOpaque(true);
+        p.setBackground(Color.white);
+        p.setPreferredSize(new Dimension(200, 20));
+        right.add(p);
+        System.out.println(players[player]);
 
         Iterator<Integer> it = players[player].getProperties().iterator();
         int size = players[player].getProperties().size();
         JLabel data[] = new JLabel[size];
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) 
+        {
             int loc=it.next();
             Object c=null;
             for(int j=0;j<property.length;j++)
@@ -274,7 +292,9 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
             data[i].setOpaque(true);
             data[i].setFont(new Font("Serif", Font.BOLD, 12));
             
-            if (c.getClass().getName().equalsIgnoreCase("monopolygame.Cities")) {
+            if (c.getClass().getName().equalsIgnoreCase("monopolygame.Cities")) 
+            {
+                System.out.println("yes");
                 if (((Property)c).getColor().equalsIgnoreCase("brown")) {
                     Color loon = new Color(181, 101, 29);
                     data[i].setBackground(loon);
@@ -295,19 +315,20 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                 } else {
                     data[i].setBackground(Color.white);
                 }
-
-                if (c.getClass().getName().equalsIgnoreCase("monopolygame.Train")) {
-                    data[i].setBackground(Color.BLACK);
-                    data[i].setForeground(Color.white);
-                } else if (property[i].getClass().getName().equalsIgnoreCase("monopolygame.waterandelec")) {
-                    data[i].setBackground(Color.darkGray);
-                    data[i].setForeground(Color.white);
-                }
-                right.add(data[i]);
             }
-            right.revalidate();
-            right.repaint();
+
+            else if (c.getClass().getName().equalsIgnoreCase("monopolygame.Train")) {
+                data[i].setBackground(Color.BLACK);
+                data[i].setForeground(Color.white);
+            } else if (property[i].getClass().getName().equalsIgnoreCase("monopolygame.waterandelec")) {
+                data[i].setBackground(Color.darkGray);
+                data[i].setForeground(Color.white);
+            }
+            right.add(data[i]);
+//            }
         }
+        right.revalidate();
+        right.repaint();
     }
     
     
@@ -625,7 +646,6 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         up.removeAll();
         name = new JLabel[4];
         balance = new JLabel[4];
-        colour = new JLabel[4];
         for (int i = 0; i < 4; i++) {
             name[i] = new JLabel(players[i].getName(), SwingConstants.CENTER);
             balance[i] = new JLabel(Integer.toString(players[i].getBalance()), SwingConstants.CENTER);
@@ -659,6 +679,19 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         name[3].setOpaque(true);
         balance[3].setBackground(lightgreen);
         balance[3].setOpaque(true);
+        
+        name[0].addMouseListener(this);
+        balance[0].addMouseListener(this);
+        
+        name[1].addMouseListener(this);
+        balance[1].addMouseListener(this);
+        
+        name[2].addMouseListener(this);
+        balance[2].addMouseListener(this);
+        
+        name[3].addMouseListener(this);
+        balance[3].addMouseListener(this);
+
 
         up.revalidate();
         up.repaint();
