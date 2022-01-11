@@ -14,7 +14,10 @@ import java.util.Iterator;
 import java.util.logging.*;
 
 public class board extends JFrame implements KeyListener, MouseListener, ActionListener {
-
+    private JMenu menu1,menu2,menu3;
+    JMenuItem item1,item2,item3;
+    JMenuBar mb;
+    
     JPanel left, down, board, up, right;
     ImageIcon imageicon[], dice1imageicon, dice2imageicon; //board images
     JLabel label[], dice1label, dice2label;//board &dice
@@ -31,8 +34,17 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
     int counterfordice = 0;// for multiple rolling dice
     int currentplayer = 0;
     int currentdice;//used to getrent of waterandelectric
+    
+    String filename;
 
-    public board(Player[] p, Object[] property) throws IOException {
+    public board(Player[] p, Object[] property,String filename) throws IOException {
+        this.filename=filename;
+        menubar();
+        Build = new JButton("Build");
+        Sell = new JButton("Sell");
+        Morgage = new JButton("Morgage");
+        Redeem = new JButton("Redeem");
+        
         down = new JPanel(new GridLayout(1, 4, 20, 5));//up,left,down,right
         down.setBorder(BorderFactory.createEmptyBorder(20, 49, 20, 20));
         up = new JPanel(new GridLayout(2, 4, 0, 0));
@@ -50,6 +62,12 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         centredata(); // adding centre board
         add(board, BorderLayout.CENTER);
         downdata(); //adding down data
+        Build.setEnabled(false);
+        Sell.setEnabled(false);
+        Morgage.setEnabled(false);
+        Redeem.setEnabled(false);
+//        endturn.setEnabled(false);
+        
         add(down, BorderLayout.SOUTH);
         up_data();//adding updata
         add(up, BorderLayout.NORTH);
@@ -60,6 +78,19 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         add(right, BorderLayout.EAST);
         setplayersonboard();
         setVisible(true);
+    }
+    
+    public void menubar() {
+         mb=new JMenuBar();
+        menu1=new JMenu("options");
+        JMenuItem item1=new JMenuItem(new MyAction());
+        JMenuItem item2=new JMenuItem(new MyAction2());
+        JMenuItem item3=new JMenuItem(new MyAction3());
+        menu1.add(item1);
+        menu1.add(item2);
+        menu1.add(item3);
+        mb.add(menu1);
+        setJMenuBar(mb);
     }
 
     public void setplayersonboard() {
@@ -149,6 +180,8 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         up_data();
                     }
                 }// final currentlocation
+                
+                leftdata(players[currentplayer].getCurrentLocation());
                 
                 if(players[currentplayer].getCurrentLocation() ==4)//tax
                 {
@@ -390,7 +423,7 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         i++;
                     }
                     movingplayer(ran1 + ran2);
-//                    movingplayer(30);
+//                    movingplayer(6);
                     counterfordice++;
 
                     if (ran1 != ran2 || counterfordice > 2) {
@@ -408,6 +441,8 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                 public void run() {
 //                    currentplayer=0;
                     currentplayer = (currentplayer + 1) % 4;
+                    leftdata(players[currentplayer].getCurrentLocation());
+                    rightdata(currentplayer);
                     downdata();
                     if (players[currentplayer].getIsJail()) {
                         String[] options = {"yes", "no"}; //// setting for buying a property
@@ -429,12 +464,13 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         rolldice.setEnabled(true);
                         downdata();
                     }
+//                    downdata();
                 }
             };
             t.start();
         }
     }
-
+    
     @Override
     public void mouseReleased(MouseEvent me) {
     }
@@ -514,6 +550,8 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
 
         left.removeAll();
         left.setPreferredSize(new Dimension(250, 20));
+        Build.setEnabled(false);
+//        downdata();
         if (s == 0) {
             JLabel start = new JLabel("MONOPOLY", SwingConstants.CENTER);
 
@@ -620,6 +658,17 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                             left.add(rent[j]);
                         }
                         left.add(houseprice);
+                        
+                        if(currentplayer==c.getOwnerid()&&c.canbuild()) // for building
+                        {
+                            Build.setEnabled(true);
+//                            downdata();
+                        }
+//                        else{
+//                            Build.setEnabled(false);
+//                            downdata();
+//                        }
+                        
                     } else if (property[i].getClass().getName().equalsIgnoreCase("monopolygame.Train")) {
                         Train t = (Train) property[i];
                         leftcolour = new JLabel(t.getName(), SwingConstants.CENTER);
@@ -699,10 +748,10 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
     public void downdata() {
         down.removeAll();
         //JButton Build, Sell, Morgage, Redeem,rolldice;//downdata
-        Build = new JButton("Build");
-        Sell = new JButton("Sell");
-        Morgage = new JButton("Morgage");
-        Redeem = new JButton("Redeem");
+//        Build = new JButton("Build");
+//        Sell = new JButton("Sell");
+//        Morgage = new JButton("Morgage");
+//        Redeem = new JButton("Redeem");
         rolldice = new JButton("Roll Dice");
         endturn = new JButton("End Turn");
 //        Build.setPreferredSize(new Dimension(220, 70));
@@ -740,10 +789,11 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         down.add(endturn);
 //        dice2label.addMouseListener(this);
 //        dice1label.addMouseListener(this);
-        Build.setEnabled(false);
-        Sell.setEnabled(false);
-        Morgage.setEnabled(false);
-        Redeem.setEnabled(false);
+
+//        Build.setEnabled(false);
+//        Sell.setEnabled(false);
+//        Morgage.setEnabled(false);
+//        Redeem.setEnabled(false);
         endturn.setEnabled(false);
 
         rolldice.addMouseListener(this);
@@ -877,4 +927,52 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
     public void actionPerformed(ActionEvent ae) {
 
     }
+    
+    
+    public class MyAction extends AbstractAction {
+    public MyAction() {
+        super("save and exit");
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        // Button pressed logic goes here
+        System.out.println("save and exit pressed");
+        try {
+            Game.saveAndExit(filename);
+            setVisible(false);
+        } catch (IOException ex) {
+            Logger.getLogger(board.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(board.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    }
+     
+     public class MyAction2 extends AbstractAction {
+    public MyAction2() {
+        super("main menu");
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        // Button pressed logic goes here
+        System.out.println("main menu pressed");
+        setVisible(false);
+        new graphics();
+    }
+    }
+     
+     public class MyAction3 extends AbstractAction {
+    public MyAction3() {
+        super("technical");
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        // Button pressed logic goes here
+        System.out.println("technical pressed");
+        setVisible(false);
+        
+    }
+    }
 }
+
+

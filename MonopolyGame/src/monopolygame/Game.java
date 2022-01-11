@@ -14,6 +14,15 @@ public class Game implements Serializable{
 //    Scanner in=new Scanner(System.in);
     private static Player[] p=new Player[4];
     private static String[] filenames=new String[5];
+    private static Object[] c=null;
+    private newgame n=new newgame();
+
+    public Game() throws IOException, FileNotFoundException, ClassNotFoundException {
+        c=Game.loadProperty(c);
+    }
+    
+    
+    
     
 //    public void buyMortage(Player p)
 //    {
@@ -40,34 +49,35 @@ public class Game implements Serializable{
 //    }
     
     
-    public void canbuild(Player pl,Object[] pr) {
-        Scanner in=new Scanner(System.in);
-        System.out.println("Choose the property u want to build in");
-        int choice=in.nextInt();
-        boolean canBuild=true;
-        if(choice<=21&&choice>=0)
-        {
-            for(int i=0;i<22;i++)
-            {
-                if(((Property)pr[choice]).getColor().equalsIgnoreCase(((Property)pr[i]).getColor()))
-                {
-                    if(((Property)pr[i]).getOwnerid()!=pl.getId())
-                        canBuild=false;
-                }                        
-            }
-
-            if(canBuild&&(pl.getBalance()>((Cities)pr[choice]).getHousesprice()))
-            {
-                System.out.println("u builded a new house");
-                ((Cities)pr[choice]).setHousecounter();
-                pl.decrementBalance(((Cities)pr[choice]).getHousesprice());
-            }
-            else
-                System.out.println("u can't build");
-        }
-        
-        else
-            System.out.println("u can only build in a city");
+    public boolean canbuild(Player pl,Object[] pr) {
+        return true;
+//        Scanner in=new Scanner(System.in);
+//        System.out.println("Choose the property u want to build in");
+//        int choice=in.nextInt();
+//        boolean canBuild=true;
+//        if(choice<=21&&choice>=0)
+//        {
+//            for(int i=0;i<22;i++)
+//            {
+//                if(((Property)pr[choice]).getColor().equalsIgnoreCase(((Property)pr[i]).getColor()))
+//                {
+//                    if(((Property)pr[i]).getOwnerid()!=pl.getId())
+//                        canBuild=false;
+//                }                        
+//            }
+//
+//            if(canBuild&&(pl.getBalance()>((Cities)pr[choice]).getHousesprice()))
+//            {
+//                System.out.println("u builded a new house");
+//                ((Cities)pr[choice]).setHousecounter();
+//                pl.decrementBalance(((Cities)pr[choice]).getHousesprice());
+//            }
+//            else
+//                System.out.println("u can't build");
+//        }
+//        
+//        else
+//            System.out.println("u can only build in a city");
     }
     
 //<<<<<<< board
@@ -146,7 +156,7 @@ public class Game implements Serializable{
                        {
                            p[i].decrementBalance(((Property)c[j]).getPrice());
                            ((Property)c[j]).setOwnerid(i);
-                          // p[i].setProperties(c[j]);
+//                           p[i].addProperties(c[j]);
                        }
                    }
                }
@@ -219,40 +229,85 @@ public class Game implements Serializable{
     }
     public void saveNewGame(String name) throws FileNotFoundException, IOException, ClassNotFoundException
     {
-        name=name+".bin";
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name));
-        out.writeObject(p);
-        out.close();
+        String fileplayer="files\\"+name+"players.bin";
+        String fileproperties="files\\"+name+"properties.bin";
         
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(name));
+        ObjectOutputStream out1 = new ObjectOutputStream(new FileOutputStream(fileplayer));
+        out1.writeObject(p);
+        out1.close();
+        c=loadProperty(c);
+        ObjectOutputStream out2 = new ObjectOutputStream(new FileOutputStream(fileproperties));
+        out2.writeObject(c);
+        out2.close();
+        
+        
+        
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileplayer));
         Player[] player1=new Player[4];
         player1=(Player[])in.readObject();
-        filenames[0]=name;
-        System.out.println("file name: "+name);
+        //filenames[0]=name;
+        System.out.println("file name: "+fileplayer);
         for(int i=0;i<player1.length;i++)
         {
             System.out.println("Player: "+player1[i].getName());
         }
         
+        ObjectInputStream in2 = new ObjectInputStream(new FileInputStream(fileproperties));
+        Object[] property1=new Object[4];
+        property1=(Object[])in2.readObject();
+        System.out.println(property1.length);
+        //filenames[0]=name;
+        System.out.println("file name: "+fileproperties);
+        for(int i=0;i<property1.length;i++)
+        {
+            System.out.println("property: "+((Property)property1[i]).getName());
+        }
+        
+        MonopolyGame.n.setVisible(false);
+        new board(p,c,name);
+        
+        
     }
     public void loadgame(String name) throws FileNotFoundException, IOException, ClassNotFoundException
     {
-        for(int i=0;i<filenames.length;i++)
-        {
-            //System.out.println("nour");
-            if(name.equals(filenames[i]))
-            {
+//        File file=new File("\\oop\\monopoly\\Monopoly-Game\\MonopolyGame\\files");
+//        File[] f=file.listFiles();
+//        System.out.println("file names:");
+//        for(int i=0;i<f.length;i++)
+//        {
+//            System.out.println(f[i]+"  ");
+//        }
+//        System.out.println("lolo");
+//        for(int i=0;i<filenames.length;i++)
+//        {
+//            //System.out.println("nour");
+//            if(name.equals(filenames[i]))
+//            {
                 //System.out.println("nour");
-                ObjectInputStream in = new ObjectInputStream(new FileInputStream(name));
-                Player[] player2=new Player[4];
-                player2=(Player[])in.readObject();
-                System.out.println("file name: "+name);
-                for(int j=0;j<player2.length;j++)
-                {
-                    System.out.println("Player: "+player2[j].getName());
-                }
-            }
+        String fileplayer="files\\"+name+"players.bin";
+        String fileproperties="files\\"+name+"properties.bin";
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileplayer));
+        p=(Player[])in.readObject();
+        ObjectInputStream in2 = new ObjectInputStream(new FileInputStream(fileproperties));
+        c=(Object[])in2.readObject();
+//                Player[] player2=new Player[4];
+//                player2=(Player[])in.readObject();
+        System.out.println("player file name: "+fileplayer);
+        for(int j=0;j<p.length;j++)
+        {
+            System.out.println("Player: "+p[j].getName());
         }
+        System.out.println("property file name: "+fileproperties);
+        for(int j=0;j<c.length;j++)
+        {
+            System.out.println("property: "+((Property)c[j]).getName());
+        }
+//            }
+//        }
+        
+        MonopolyGame.l.setVisible(false);
+        new board(p,c,name);
+        
     }
     public void newgame(Player[] p,String name) throws IOException, FileNotFoundException, ClassNotFoundException
     {
@@ -265,6 +320,44 @@ public class Game implements Serializable{
         for(int i=0;i<p.length;i++)
         {
             System.out.println("Player: "+p[i].getName());
+        }
+    }
+    
+    
+    public static void saveAndExit(String name) throws FileNotFoundException, IOException, ClassNotFoundException
+    {
+        String fileplayer="files\\"+name+"players.bin";
+        String fileproperties="files\\"+name+"properties.bin";
+        
+        ObjectOutputStream out1 = new ObjectOutputStream(new FileOutputStream(fileplayer));
+        out1.writeObject(p);
+        out1.close();
+        c=loadProperty(c);
+        ObjectOutputStream out2 = new ObjectOutputStream(new FileOutputStream(fileproperties));
+        out2.writeObject(c);
+        out2.close();
+        
+        
+        
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileplayer));
+        Player[] player1=new Player[4];
+        player1=(Player[])in.readObject();
+        //filenames[0]=name;
+        System.out.println("file name: "+fileplayer);
+        for(int i=0;i<player1.length;i++)
+        {
+            System.out.println("Player: "+player1[i].getCurrentLocation());
+        }
+        
+        ObjectInputStream in2 = new ObjectInputStream(new FileInputStream(fileproperties));
+        Object[] property1=new Object[4];
+        property1=(Object[])in2.readObject();
+        //System.out.println(property1.length);
+        //filenames[0]=name;
+        System.out.println("file name: "+fileproperties);
+        for(int i=0;i<property1.length;i++)
+        {
+            System.out.println("property: "+((Property)property1[i]).getName());
         }
     }
 }
