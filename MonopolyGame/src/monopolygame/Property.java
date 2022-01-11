@@ -34,6 +34,7 @@ private int ID;
         this.ismortaged = false;
         this.isbought = false;
         this.rent = rent;
+        ownerid=-1;
     }
 
     public Property(int ID, String name, String colour, int price,int rent,boolean ismortaged,boolean isbought,int ownerid)

@@ -108,7 +108,14 @@ public class newgame extends JFrame implements ActionListener{
                 //System.out.println(t5.getText());
                 
                 //System.out.println(players[1].getName());
-                Game game=new Game();
+                Game game=null;
+            try {
+                game = new Game();
+            } catch (IOException ex) {
+                Logger.getLogger(newgame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(newgame.class.getName()).log(Level.SEVERE, null, ex);
+            }
             try {
                 game.newgame(players,gamename);
             } catch (IOException ex) {
@@ -116,7 +123,10 @@ public class newgame extends JFrame implements ActionListener{
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(newgame.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            
                 //game.returnPlayers();
+                
             
         }
     }

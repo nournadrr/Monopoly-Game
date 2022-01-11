@@ -15,17 +15,16 @@ public class Train extends Property{
     
    
     
-    public int getRent(Object[] pr,int oID) {
+    public int getRent(Object[] pr,int ownerID) {
         int traincount=0;
         for(int i=22;i<=25;i++)
         {
-            if(oID==((Property)pr[i]).getOwnerid())
+            if(ownerID==((Property)pr[i]).getOwnerid())
                 traincount++;
         }
         
     switch(traincount){
-        case 1:
-            return 25;
+        case 1:return 25;
         case 2:return 50;
         case 3:return 100;
         case 4:return 200;

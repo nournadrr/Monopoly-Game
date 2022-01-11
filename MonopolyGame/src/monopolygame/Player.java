@@ -11,25 +11,34 @@ import java.util.*;
  * @author Dell
  */
 public class Player implements Serializable{
-//    Scanner in=new Scanner(System.in);
     private int currentLocation;
     private String name;
     private int id;
-    private Object[] properties;
+    private ArrayList<Integer> properties;
 
     private int numOfProperties;
     private static int noOfPlayers=0;
     private boolean isPlaying;
+    
     private boolean isJail;
     private int balance;
     private boolean jailCard;
     private int jailtime;
     String colour;
+
+    public ArrayList<Integer> getProperties() {
+        return properties;
+    }
+
+    public void addProperties(int num) {
+        this.properties.add(num);
+    }
     
     public Player()
     {
         currentLocation=0;
-        properties=new Property[28];
+        properties=new ArrayList<>();
+//        properties=new Property[28];
 
         noOfPlayers++;
         isPlaying=true;
@@ -42,7 +51,7 @@ public class Player implements Serializable{
     public Player(int id,String name,int balance,int currentLocation,boolean isJail,boolean isPlaying,boolean jailCard,int numOfProperties,int jailtime)
     {
         this.currentLocation=currentLocation;
-        this.properties=new Property[28];
+//        this.properties=new Property[28];
         this.id=id;
         this.name=name;
         noOfPlayers++;
@@ -61,14 +70,15 @@ public class Player implements Serializable{
     }
     public void incrementCurrentLocation(int dice)
     {
-        for(int i=0;i<dice;i++)
-        {
-            currentLocation=(currentLocation+1)%39;
-            if(currentLocation==0)
-                incrementBalance(250);
-        }
-        if(currentLocation==30)
-            isJail=true;
+        currentLocation=(currentLocation+dice)%40;
+//        for(int i=0;i<dice;i++)
+//        {
+//            currentLocation=(currentLocation+1)%39;
+//            if(currentLocation==0)
+//                incrementBalance(250);
+//        }
+//        if(currentLocation==30)
+//            isJail=true;
     }
 
     public void setName(String name)
@@ -79,11 +89,11 @@ public class Player implements Serializable{
     {
         this.id=id;
     }
-    public void setProperties(Object p)
-    {
-        properties[numOfProperties++]=p;
-
-    }
+//    public void setProperties(Object p)
+//    {
+//        properties[numOfProperties++]=p;
+//
+//    }
     public void decrementproperties()
     {
         numOfProperties--;
@@ -91,7 +101,7 @@ public class Player implements Serializable{
     public void incrementjailtime()
     {
         jailtime++;
-        if(jailtime==2)
+        if(jailtime==3)
         {
             jailtime=0;
             isJail=false;
@@ -122,52 +132,52 @@ public class Player implements Serializable{
     }
     public void decrementBalance(int amount)
     {
-        
         balance-=amount;
-        if(balance<0)
-        {
-            System.out.println("u don't have enough money you should pay more "+balance);
-            while(balance<0)
-            {
-                boolean choice=false;
-                for(int i=0;i<numOfProperties;i++)
-                {
-                    if(((Property)properties[i]).isIsmortaged()==false)
-                    {
-                        choice=true;
-                        break;
-                    }
-                }
-                if(choice)
-                {
-                    mortage();
-                }
-                else
-                {
-                    isPlaying=false;
-                    noOfPlayers--;
-                    break;
-                }
-            }
-        }
+//        balance-=amount;
+//        if(balance<0)
+//        {
+//            System.out.println("u don't have enough money you should pay more "+balance);
+//            while(balance<0)
+//            {
+//                boolean choice=false;
+//                for(int i=0;i<numOfProperties;i++)
+//                {
+//                    if(((Property)properties[i]).isIsmortaged()==false)
+//                    {
+//                        choice=true;
+//                        break;
+//                    }
+//                }
+//                if(choice)
+//                {
+//                    mortage();
+//                }
+//                else
+//                {
+//                    isPlaying=false;
+//                    noOfPlayers--;
+//                    break;
+//                }
+//            }
+//        }
         
     }
-    public void mortage()
-    {
-        Scanner in=new Scanner(System.in);
-        System.out.println("choose which property u want to mortgage\n");
-        int prid=in.nextInt();  // id of chosen property
-        if(((Property)properties[prid]).getOwnerid()==this.id)
-        {
-            if(((Property)properties[prid]).isIsmortaged()==false)
-            {
-                ((Property)properties[prid]).setIsmortaged(true);
-                incrementBalance(((Property)properties[prid]).getPrice()); 
-            }
-            else 
-                System.out.println("it is already mortgaged\n");
-        }
-    }
+//    public void mortage()
+//    {
+//        Scanner in=new Scanner(System.in);
+//        System.out.println("choose which property u want to mortgage\n");
+//        int prid=in.nextInt();  // id of chosen property
+//        if(((Property)properties[prid]).getOwnerid()==this.id)
+//        {
+//            if(((Property)properties[prid]).isIsmortaged()==false)
+//            {
+//                ((Property)properties[prid]).setIsmortaged(true);
+//                incrementBalance(((Property)properties[prid]).getPrice()); 
+//            }
+//            else 
+//                System.out.println("it is already mortgaged\n");
+//        }
+//    }
     public void setJailCard(boolean card)
     {
         jailCard=card;
@@ -204,10 +214,10 @@ public class Player implements Serializable{
     {
         return balance;
     }
-    public Object getProperties(int i)
-    {
-        return properties[i];
-    }
+//    public Object getProperties(int i)
+//    {
+//        return properties[i];
+//    }
   
     public int getjailtime()
     {

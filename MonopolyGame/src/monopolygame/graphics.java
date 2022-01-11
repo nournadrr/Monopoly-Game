@@ -31,8 +31,8 @@ import javax.swing.*;
  */
 public class graphics extends JFrame implements ActionListener {
     private JButton newgame,loadgame;
-    newgame n=new newgame();
-    loadgame load=new loadgame();
+    //newgame n=new newgame();
+    //loadgame load=new loadgame();
     
     public graphics()
     {
@@ -58,7 +58,7 @@ public class graphics extends JFrame implements ActionListener {
     
     public void paint(Graphics g)
     {
-//        super.paint(g);
+        super.paint(g);
 //        Font myFont = new Font ("Courier New", 1, 17);
 //        g.setFont (myFont);
 //        g.drawString ("Hello World", 10, 10);
@@ -77,21 +77,22 @@ public class graphics extends JFrame implements ActionListener {
         p.add(loadgame,BorderLayout.EAST);
         add(p,BorderLayout.SOUTH);
         newgame.addActionListener(this);
-        
+        loadgame.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        Object button=ae.getSource();
-        if(button.equals(newgame))
+//        Object button=ae.getSource();
+//        if(button.equals(newgame))
+        if(ae.getSource()==newgame)
         {
             setVisible(false);
-            n.setVisible(true);
+            MonopolyGame.n.setVisible(true);
         }
-        if(button.equals(loadgame))
+        if(ae.getSource()==loadgame)
         {
             setVisible(false);
-            load.setVisible(true);
+            MonopolyGame.l.setVisible(true);
         }
     }
 }
