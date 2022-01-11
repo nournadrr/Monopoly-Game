@@ -30,6 +30,7 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
 
     int counterfordice = 0;// for multiple rolling dice
     int currentplayer = 0;
+    int currentdice;//used to getrent of waterandelectric
 
     public board(Player[] p, Object[] property) throws IOException {
         down = new JPanel(new GridLayout(1, 4, 20, 5));//up,left,down,right
@@ -52,11 +53,11 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         add(down, BorderLayout.SOUTH);
         up_data();//adding updata
         add(up, BorderLayout.NORTH);
-        left = new JPanel(new GridLayout(9, 1, 0, 0));//up,left,down,right
+        left = new JPanel(new GridLayout(10, 1, 0, 0));//up,left,down,right        
         leftdata(0);// adding leftdata
         add(left, BorderLayout.WEST);
         rightdata(0);//adding properties of players
-        add(right,BorderLayout.EAST);
+        add(right, BorderLayout.EAST);
         setplayersonboard();
         setVisible(true);
     }
@@ -86,9 +87,25 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
     }
 
     public void movingplayer(int dice) {
-
+        currentdice=dice;
         Thread t = new Thread() {
             public void run() {
+//                if(players[currentplayer].getIsJail())
+//                {
+//                    String[] options = {"yes", "no"}; //// setting for buying a property
+//                    if (JOptionPane.showOptionDialog(null, "Do you want to exit jail for $100", "Click a button",
+//                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0)
+//                    {
+//                        players[currentplayer].decrementBalance(100);
+//                        players[currentplayer].setIsJail(false);
+//                        up_data();
+//                    }
+//                    else
+//                    {
+//                        players[currentplayer].incrementjailtime();
+//                        return;
+//                    }
+//                }
                 for (int i = 0; i < dice; i++) {
                     try {
                         sleep(130);
@@ -100,8 +117,32 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                     players[currentplayer].incrementCurrentLocation(1);
                     label[players[currentplayer].getCurrentLocation()].add(movingplayers[currentplayer]);
                     label[players[currentplayer].getCurrentLocation()].repaint();
+                    if (players[currentplayer].getCurrentLocation() == 0) {
+                        players[currentplayer].incrementBalance(200);
+                        up_data();
+                    }
+                }// final currentlocation
+
+                if (players[currentplayer].getCurrentLocation() == 30)// jail
+                {
+                    players[currentplayer].setIsJail(true);
+                    for (int i = 29; i >= 10; i--) {
+                        try {
+                            sleep(130);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(board.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        label[players[currentplayer].getCurrentLocation()].remove(movingplayers[currentplayer]);
+                        label[players[currentplayer].getCurrentLocation()].repaint();
+                        players[currentplayer].incrementCurrentLocation(-1);
+                        label[players[currentplayer].getCurrentLocation()].add(movingplayers[currentplayer]);
+                        label[players[currentplayer].getCurrentLocation()].repaint();
+                    }
+                    rolldice.setEnabled(false);
+                    endturn.setEnabled(true);
+                } else {
+                    buyingproperty();
                 }
-                buyingproperty();
             }
         };
         t.start();
@@ -109,13 +150,12 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
 
     public void buyingproperty() {
         int currentlocation = players[currentplayer].getCurrentLocation();
-        int propertylocation=0;
+        int propertylocation = 0;
 //        for(int i=0;i<property.length;i++)
 //        {
 //            if(currentlocation==((Property)property[i]).getID())
 //                propertylocation=i;
 //        }
-        
 
         if (currentlocation == 0 || currentlocation == 2 || currentlocation == 4 || currentlocation == 7 || currentlocation == 10
                 || currentlocation == 17 || currentlocation == 20 || currentlocation == 22 || currentlocation == 30
@@ -125,38 +165,117 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         for (int i = 0; i < property.length; i++) {
             if (((Property) property[i]).getID() == currentlocation) {
 //                c = ((Property) property[i]);
-                propertylocation=i;
+                propertylocation = i;
             }
         }
-        Property c = (Property)property[propertylocation];
-        if (players[currentplayer].getBalance() > c.getPrice()) 
+        if(((Property)property[propertylocation]).getOwnerid()!=currentplayer)
         {
-            if(((Property) property[propertylocation]).getOwnerid() == -1)
+            if (property[propertylocation].getClass().getName().equalsIgnoreCase("monopolygame.Cities")) {
+                Cities c = (Cities) property[propertylocation];
+                if (players[currentplayer].getBalance() > c.getPrice()) 
+                {
+                    if (c.getOwnerid() == -1)
+                    {
+                        String[] options = {"yes", "no"}; //// setting for buying a property
+                        if (JOptionPane.showOptionDialog(null, "Do you want to buy this property", "Click a button",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0) {
+                            players[currentplayer].decrementBalance(c.getPrice());
+                            c.setOwnerid(currentplayer);
+                            players[currentplayer].addProperties(c.getID());
+                            leftdata(players[currentplayer].getCurrentLocation());
+                            up_data();
+                        }
+                    } else {
+                        String[] options = {"Owner: " + players[c.getOwnerid()].getName()}; //// setting for buying a property
+                        JOptionPane.showOptionDialog(null, "Pay : " + c.rent(), "Click a button",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        players[currentplayer].decrementBalance(c.rent());
+                        players[c.getOwnerid()].incrementBalance(c.rent());
+                        leftdata(players[currentplayer].getCurrentLocation());
+                        up_data();
+                    }
+                }
+            } else if (property[propertylocation].getClass().getName().equalsIgnoreCase("monopolygame.Train")) {
+                Train c = (Train) property[propertylocation];
+                if (players[currentplayer].getBalance() > c.getPrice()) 
+                {
+                    if (c.getOwnerid() == -1)
+                    {
+                        String[] options = {"yes", "no"}; //// setting for buying a property
+                        if (JOptionPane.showOptionDialog(null, "Do you want to buy this property", "Click a button",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0) {
+                            players[currentplayer].decrementBalance(c.getPrice());
+                            c.setOwnerid(currentplayer);
+                            players[currentplayer].addProperties(c.getID());
+                            leftdata(players[currentplayer].getCurrentLocation());
+                            up_data();
+                        }
+                    } else {
+                        String[] options = {"Owner: " + players[c.getOwnerid()].getName()}; //// setting for buying a property
+                        JOptionPane.showOptionDialog(null, "Pay : " + c.getRent(property,c.getOwnerid()), "Click a button",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        players[currentplayer].decrementBalance(c.getRent(property,c.getOwnerid()));
+                        players[c.getOwnerid()].incrementBalance(c.getRent(property,c.getOwnerid()));
+                        leftdata(players[currentplayer].getCurrentLocation());
+                        up_data();
+                    }
+                }
+            } else if (property[propertylocation].getClass().getName().equalsIgnoreCase("monopolygame.waterandelec")) 
             {
-                String[] options = {"yes", "no"}; //// setting for buying a property
-                if (JOptionPane.showOptionDialog(null, "Do you want to buy this property", "Click a button",
-                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0) {
-                    players[currentplayer].decrementBalance(((Property) property[propertylocation]).getPrice());
-                    c.setOwnerid(currentplayer);
-                    players[currentplayer].addProperties(c.getID());
-    //                System.out.println(c.getID());
-                    leftdata(players[currentplayer].getCurrentLocation());
-                    up_data();
+                waterandelec c = (waterandelec) property[propertylocation];
+                if (players[currentplayer].getBalance() > c.getPrice()) 
+                {
+                    if (c.getOwnerid() == -1)
+                    {
+                        String[] options = {"yes", "no"}; //// setting for buying a property
+                        if (JOptionPane.showOptionDialog(null, "Do you want to buy this property", "Click a button",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0) {
+                            players[currentplayer].decrementBalance(c.getPrice());
+                            c.setOwnerid(currentplayer);
+                            players[currentplayer].addProperties(c.getID());
+                            leftdata(players[currentplayer].getCurrentLocation());
+                            up_data();
+                        }
+                    } else {
+                        String[] options = {"Owner: " + players[c.getOwnerid()].getName()}; //// setting for buying a property
+                        JOptionPane.showOptionDialog(null, "Pay : " + c.getRent(currentdice,property), "Click a button",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        players[currentplayer].decrementBalance(c.getRent(currentdice,property));
+                        players[c.getOwnerid()].incrementBalance(c.getRent(currentdice,property));
+                        leftdata(players[currentplayer].getCurrentLocation());
+                        up_data();
+                    }
                 }
             }
-            else
-            {
-                String[] options = {"Owner: "+players[c.getOwnerid()].getName()}; //// setting for buying a property
-                JOptionPane.showOptionDialog(null,"Pay : "+c.getRent(), "Click a button",
-                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-                players[currentplayer].decrementBalance(c.getRent());
-                players[c.getOwnerid()].incrementBalance(c.getRent());
-//                c.setOwnerid(currentplayer);
-                leftdata(players[currentplayer].getCurrentLocation());
-                up_data();
-            }
-        }
-        
+    }
+
+//        Property c = (Property)property[propertylocation];
+//        if (players[currentplayer].getBalance() > c.getPrice()) 
+//        {
+//            if(((Property) property[propertylocation]).getOwnerid() == -1)
+//            {
+//                String[] options = {"yes", "no"}; //// setting for buying a property
+//                if (JOptionPane.showOptionDialog(null, "Do you want to buy this property", "Click a button",
+//                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0) {
+//                    players[currentplayer].decrementBalance(((Property) property[propertylocation]).getPrice());
+//                    c.setOwnerid(currentplayer);
+//                    players[currentplayer].addProperties(c.getID());
+//                    leftdata(players[currentplayer].getCurrentLocation());
+//                    up_data();
+//                }
+//            }
+//            else
+//            {
+//                String[] options = {"Owner: "+players[c.getOwnerid()].getName()}; //// setting for buying a property
+//                JOptionPane.showOptionDialog(null,"Pay : "+c.getRent(), "Click a button",
+//                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+//                players[currentplayer].decrementBalance(c.getRent());
+//                players[c.getOwnerid()].incrementBalance(c.getRent());
+////                c.setOwnerid(currentplayer);
+//                leftdata(players[currentplayer].getCurrentLocation());
+//                up_data();
+//            }
+//        }
         rightdata(currentplayer);
     }
 
@@ -186,13 +305,10 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                 leftdata(s);
             }
         }
-        
-        for(int i=0;i<name.length;i++)
-        {
-            if(me.getSource()==name[i]||me.getSource()==balance[i])
-            {
+
+        for (int i = 0; i < name.length; i++) {
+            if (me.getSource() == name[i] || me.getSource() == balance[i]) {
                 rightdata(i);
-                System.out.println("yes");
             }
         }
 
@@ -224,6 +340,7 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         i++;
                     }
                     movingplayer(ran1 + ran2);
+//                    movingplayer(12);
                     counterfordice++;
 
                     if (ran1 != ran2 || counterfordice > 2) {
@@ -240,10 +357,27 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
             Thread t = new Thread() {
                 public void run() {
                     currentplayer = (currentplayer + 1) % 4;
-                    endturn.setEnabled(false);
-                    rolldice.setEnabled(true);
                     downdata();
-//                    down.repaint();
+                    if (players[currentplayer].getIsJail()) {
+                        String[] options = {"yes", "no"}; //// setting for buying a property
+                        if (JOptionPane.showOptionDialog(null, "Do you want to exit jail for $100", "Click a button",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0) {
+                            players[currentplayer].decrementBalance(100);
+                            players[currentplayer].setIsJail(false);
+                            endturn.setEnabled(false);
+                            rolldice.setEnabled(true);
+                            up_data();
+                        } else {
+                            players[currentplayer].incrementjailtime();
+                            endturn.setEnabled(true);
+                            rolldice.setEnabled(false);
+                            return;
+                        }
+                    } else {
+                        endturn.setEnabled(false);
+                        rolldice.setEnabled(true);
+                        downdata();
+                    }
                 }
             };
             t.start();
@@ -263,64 +397,56 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
     }
 
     public void rightdata(int player) {
-//        System.out.println("hello");
         right.removeAll();
         right.setPreferredSize(new Dimension(250, 20));
-        
-        JLabel p = new JLabel("Properties of: "+players[player].getName(), SwingConstants.CENTER);
+
+        JLabel p = new JLabel("Properties of: " + players[player].getName(), SwingConstants.CENTER);
         p.setFont(new Font("Serif", Font.BOLD, 14));
         p.setOpaque(true);
         p.setBackground(Color.white);
         p.setPreferredSize(new Dimension(200, 20));
         right.add(p);
-        System.out.println(players[player]);
 
         Iterator<Integer> it = players[player].getProperties().iterator();
         int size = players[player].getProperties().size();
         JLabel data[] = new JLabel[size];
-        for (int i = 0; i < size; i++) 
-        {
-            int loc=it.next();
-            Object c=null;
-            for(int j=0;j<property.length;j++)
-            {
-                if(loc==((Property)property[j]).getID())
-                    c=(Property)property[j];
+        for (int i = 0; i < size; i++) {
+            int loc = it.next();
+            Object c = null;
+            for (int j = 0; j < property.length; j++) {
+                if (loc == ((Property) property[j]).getID()) {
+                    c = (Property) property[j];
+                }
             }
-            System.out.println(((Property)c).getName());
-            data[i]=new JLabel(((Property)c).getName(),SwingUtilities.CENTER);
+            data[i] = new JLabel(((Property) c).getName(), SwingUtilities.CENTER);
             data[i].setOpaque(true);
             data[i].setFont(new Font("Serif", Font.BOLD, 12));
-            
-            if (c.getClass().getName().equalsIgnoreCase("monopolygame.Cities")) 
-            {
-                System.out.println("yes");
-                if (((Property)c).getColor().equalsIgnoreCase("brown")) {
+
+            if (c.getClass().getName().equalsIgnoreCase("monopolygame.Cities")) {
+                if (((Property) c).getColor().equalsIgnoreCase("brown")) {
                     Color loon = new Color(181, 101, 29);
                     data[i].setBackground(loon);
-                } else if (((Property)c).getColor().equalsIgnoreCase("blue")) {
+                } else if (((Property) c).getColor().equalsIgnoreCase("blue")) {
                     data[i].setBackground(Color.cyan);
-                } else if (((Property)c).getColor().equalsIgnoreCase("pink")) {
+                } else if (((Property) c).getColor().equalsIgnoreCase("pink")) {
                     data[i].setBackground(Color.pink);
-                } else if (((Property)c).getColor().equalsIgnoreCase("orange")) {
+                } else if (((Property) c).getColor().equalsIgnoreCase("orange")) {
                     data[i].setBackground(Color.orange);
-                } else if (((Property)c).getColor().equalsIgnoreCase("red")) {
+                } else if (((Property) c).getColor().equalsIgnoreCase("red")) {
                     data[i].setBackground(Color.red);
-                } else if (((Property)c).getColor().equalsIgnoreCase("yellow")) {
+                } else if (((Property) c).getColor().equalsIgnoreCase("yellow")) {
                     data[i].setBackground(Color.yellow);
-                } else if (((Property)c).getColor().equalsIgnoreCase("green")) {
+                } else if (((Property) c).getColor().equalsIgnoreCase("green")) {
                     data[i].setBackground(Color.GREEN);
-                } else if (((Property)c).getColor().equalsIgnoreCase("darkblue")) {
+                } else if (((Property) c).getColor().equalsIgnoreCase("darkblue")) {
                     data[i].setBackground(Color.BLUE);
                 } else {
                     data[i].setBackground(Color.white);
                 }
-            }
-
-            else if (c.getClass().getName().equalsIgnoreCase("monopolygame.Train")) {
+            } else if (c.getClass().getName().equalsIgnoreCase("monopolygame.Train")) {
                 data[i].setBackground(Color.BLACK);
                 data[i].setForeground(Color.white);
-            } else if (property[i].getClass().getName().equalsIgnoreCase("monopolygame.waterandelec")) {
+            } else if (c.getClass().getName().equalsIgnoreCase("monopolygame.waterandelec")) {
                 data[i].setBackground(Color.darkGray);
                 data[i].setForeground(Color.white);
             }
@@ -330,13 +456,11 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         right.revalidate();
         right.repaint();
     }
-    
-    
-    
 
     public void leftdata(int s) {
 //        left=new JPanel(new GridLayout(8,1,0,0));//up,left,down,right
 //        left.setBorder(BorderFactory.createEmptyBorder(20, 49, 20, 220));
+
         left.removeAll();
         left.setPreferredSize(new Dimension(250, 20));
         if (s == 0) {
@@ -424,17 +548,20 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         buyingprice = new JLabel(text);
                         left.add(buyingprice);
 
-                        rent = new JLabel[5];
-                        text = "Rent with 1 house: " + c.getRenthouse();
+                        rent = new JLabel[6];
+
+                        text = "Rent: " + c.getRent();
                         rent[0] = new JLabel(text);
-                        text = "Rent with 2 house: " + c.getRent2();
+                        text = "Rent with 1 house: " + c.getRenthouse();
                         rent[1] = new JLabel(text);
-                        text = "Rent with 3 house: " + c.getRent3();
+                        text = "Rent with 2 house: " + c.getRent2();
                         rent[2] = new JLabel(text);
-                        text = "Rent with 4 house: " + c.getRent4();
+                        text = "Rent with 3 house: " + c.getRent3();
                         rent[3] = new JLabel(text);
-                        text = "Rent with hotel: " + c.getRentofhotel();
+                        text = "Rent with 4 house: " + c.getRent4();
                         rent[4] = new JLabel(text);
+                        text = "Rent with hotel: " + c.getRentofhotel();
+                        rent[5] = new JLabel(text);
                         text = "Building price: " + c.getHousesprice();
                         houseprice = new JLabel(text);
 
@@ -456,13 +583,13 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         left.add(buyingprice);
 
                         rent = new JLabel[4];
-                        text = "Rent with 1 house: 25";
+                        text = "Rent with 1 train: 25";
                         rent[0] = new JLabel(text);
-                        text = "Rent with 2 house: 50";
+                        text = "Rent with 2 trains: 50";
                         rent[1] = new JLabel(text);
-                        text = "Rent with 3 house: 100";
+                        text = "Rent with 3 trains: 100";
                         rent[2] = new JLabel(text);
-                        text = "Rent with 4 house: 200";
+                        text = "Rent with 4 trains: 200";
                         rent[3] = new JLabel(text);
                         for (int j = 0; j < rent.length; j++) {
                             left.add(rent[j]);
@@ -481,9 +608,9 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         left.add(buyingprice);
 
                         rent = new JLabel[2];
-                        text = "if 1 owned -> rent is 4*dice";
+                        text = "if 1 owned rent is 4*dice";
                         rent[0] = new JLabel(text);
-                        text = "if 1 owned -> rent is 10*dice";
+                        text = "if 2 owned rent is 10*dice";
                         rent[1] = new JLabel(text);
 
                         for (int j = 0; j < rent.length; j++) {
@@ -492,7 +619,6 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                     }
                     String own;
                     int ownerid = ((Property) property[i]).getOwnerid();
-                    System.out.println(((Property) property[i]).getName() + "  " + ownerid);
                     if (ownerid == -1) {
                         own = "No Owner";
                     } else {
@@ -679,19 +805,18 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         name[3].setOpaque(true);
         balance[3].setBackground(lightgreen);
         balance[3].setOpaque(true);
-        
+
         name[0].addMouseListener(this);
         balance[0].addMouseListener(this);
-        
+
         name[1].addMouseListener(this);
         balance[1].addMouseListener(this);
-        
+
         name[2].addMouseListener(this);
         balance[2].addMouseListener(this);
-        
+
         name[3].addMouseListener(this);
         balance[3].addMouseListener(this);
-
 
         up.revalidate();
         up.repaint();

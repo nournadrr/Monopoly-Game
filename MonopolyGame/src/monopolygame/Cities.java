@@ -105,18 +105,18 @@ public class Cities extends Property{
     public void setRentofhotel(int rentofhotel) {
         this.rentofhotel = rentofhotel;
     }
-public void rent(){
+public int rent(){
  
     switch(housecounter)
     {
-        case 0:super.getRent();break;
-        case 1:getRenthouse();break;
-        case 2:getRent2();break;
-        case 3:getRent3();break;
-        case 4:getRent4();break;
-        case 5:getRentofhotel();break;
+        case 0:return super.getRent();
+        case 1:return getRenthouse();
+        case 2:return getRent2();
+        case 3:return getRent3();
+        case 4:return getRent4();
+        case 5:return getRentofhotel();
     }
-   
+   return -1;
         
     }
 

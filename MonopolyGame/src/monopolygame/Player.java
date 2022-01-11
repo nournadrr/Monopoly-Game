@@ -11,16 +11,15 @@ import java.util.*;
  * @author Dell
  */
 public class Player implements Serializable{
-//    Scanner in=new Scanner(System.in);
     private int currentLocation;
     private String name;
     private int id;
     private ArrayList<Integer> properties;
-//    private Object[] properties;
 
     private int numOfProperties;
     private static int noOfPlayers=0;
     private boolean isPlaying;
+    
     private boolean isJail;
     private int balance;
     private boolean jailCard;
@@ -102,7 +101,7 @@ public class Player implements Serializable{
     public void incrementjailtime()
     {
         jailtime++;
-        if(jailtime==2)
+        if(jailtime==3)
         {
             jailtime=0;
             isJail=false;
