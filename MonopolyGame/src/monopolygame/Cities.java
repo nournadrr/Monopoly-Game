@@ -60,6 +60,10 @@ public class Cities extends Property {
     public void incrementHousecounter() {
         this.housecounter++;
     }
+    
+    public void decrementHousecounter() {
+        this.housecounter--;
+    }
 
     public int getRenthouse() {
         return renthouse;
@@ -103,10 +107,13 @@ public class Cities extends Property {
 
     public int rent() {
 
+        System.out.println(housecounter);
         switch (housecounter) {
             case 0:
+                System.out.println("0");
                 return super.getRent();
             case 1:
+                System.out.println("1");
                 return getRenthouse();
             case 2:
                 return getRent2();
@@ -121,9 +128,29 @@ public class Cities extends Property {
 
     }
     
-    public boolean canbuild()
+    public boolean canbuild(int currentplayer,Cities c,Object[] properties)
     {
-        return true;
+        boolean build=true;
+        
+        if(getHousecounter()>=5)
+            build=false;
+        else
+        {
+            for(int i=0;i<properties.length;i++)
+            {
+                if(properties[i].getClass().getName().equalsIgnoreCase("monopolygame.Cities"))
+                {
+                    if(c.getColor().equals(((Cities)properties[i]).getColor()))
+                    {
+                        if(currentplayer!=((Cities)properties[i]).getOwnerid())
+                            build=false;
+                    }
+                }
+            }
+        }
+        
+        
+        return build;
 //        Scanner in=new Scanner(System.in);
 //        System.out.println("Choose the property u want to build in");
 //        int choice=in.nextInt();

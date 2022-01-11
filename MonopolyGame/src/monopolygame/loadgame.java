@@ -55,17 +55,19 @@ public class loadgame extends JFrame implements ActionListener{
         
         File file=new File("files");
         File[] f=file.listFiles();
-        String[] s=new String[f.length];
+        String[] s=new String[f.length/2];
 //        for(int i=0;i<f.length;i++)
 //        {
 //            s[i]=f[i].toString();
 //        }
         //System.out.println(s[1].sbstring(49, s[1].indexOf("players")));
         //System.out.println(s[2].sbstring(49, s[2].indexOf("players")));
+        int j=0;
         for(int i=0;i<f.length;i=i+2)
         {
-            s[i]=f[i].toString();
-            s[i]=s[i].substring(6, s[i].indexOf("players"));
+            s[j]=f[i].toString();
+            s[j]=s[j].substring(6, s[j].indexOf("players"));
+            j++;
         }
         cb=new JComboBox(s);
         p1.add(cb);
