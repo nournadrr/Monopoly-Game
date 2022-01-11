@@ -88,8 +88,9 @@ public class MonopolyGame {
         p[3].setId(4);
         Object[] a=null;
         a=Game.loadProperty(a);
-        ((Property)a[26]).setOwnerid(0);
-        ((Property)a[27]).setOwnerid(0);
+//        ((Property)a[26]).setOwnerid(0);
+//        ((Property)a[27]).setOwnerid(0);
+//        p[0].setJailCard(true);
 //        for(int i=0;i<a.length;i++)
 //            ((Property)a[i]).setOwnerid(-1);
         new board(p,a);

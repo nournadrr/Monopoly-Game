@@ -42,7 +42,7 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         this.property = property;
         addKeyListener(this);
         setLayout(new BorderLayout());
-        setSize(1330, 1010);
+        setSize(1530, 1010);
         setResizable(false);
 //        setExtendedState(JFrame.MAXIMIZED_BOTH); 
 //        setUndecorated(true);
@@ -86,26 +86,53 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         label[0].add(movingplayers[3]);
     }
 
+    public void lucky() {
+//        int i=9;
+        int i=(int) (Math.random() * 6 + 1);
+        if(i==1||i==2)
+        {
+            String[] options = {"ok"}; 
+                JOptionPane.showOptionDialog(null, "Today is your Birthday get $200", "Click a button",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            players[currentplayer].incrementBalance(200);
+            up_data();
+        }
+        else if(i==3||i==4)
+        {
+            String[] options = {"ok"}; 
+                JOptionPane.showOptionDialog(null, "Your car broke, pay $50", "Click a button",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            players[currentplayer].decrementBalance(50);
+            up_data();
+        }
+        else if(i==5)
+        {
+            String[] options = {"ok"}; 
+                JOptionPane.showOptionDialog(null, "You broke the law, go to jail", "Click a button",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                if(players[currentplayer].getCurrentLocation()<30)
+                    movingplayer(30-players[currentplayer].getCurrentLocation());
+                else{
+                    int count=0;
+                    for(int j=players[currentplayer].getCurrentLocation();j!=30;j=(j+1)%40)
+                        count++;
+                    movingplayer(count);
+                    players[currentplayer].decrementBalance(200);
+                }
+        }
+        else//prison card
+        {
+            String[] options = {"ok"}; 
+                JOptionPane.showOptionDialog(null, "You were loyal to your country: get free prison escape", "Click a button",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                
+                players[currentplayer].setJailCard(true);
+        }
+    }
     public void movingplayer(int dice) {
         currentdice=dice;
         Thread t = new Thread() {
             public void run() {
-//                if(players[currentplayer].getIsJail())
-//                {
-//                    String[] options = {"yes", "no"}; //// setting for buying a property
-//                    if (JOptionPane.showOptionDialog(null, "Do you want to exit jail for $100", "Click a button",
-//                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0)
-//                    {
-//                        players[currentplayer].decrementBalance(100);
-//                        players[currentplayer].setIsJail(false);
-//                        up_data();
-//                    }
-//                    else
-//                    {
-//                        players[currentplayer].incrementjailtime();
-//                        return;
-//                    }
-//                }
                 for (int i = 0; i < dice; i++) {
                     try {
                         sleep(130);
@@ -122,8 +149,31 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         up_data();
                     }
                 }// final currentlocation
+                
+                if(players[currentplayer].getCurrentLocation() ==4)//tax
+                {
+                    String[] options = {"ok"}; //// setting for buying a property
+                        JOptionPane.showOptionDialog(null, "Tax area pay 200", "Click a button",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        players[currentplayer].decrementBalance(200);
+                        up_data();
+                }
+                else if(players[currentplayer].getCurrentLocation() ==38)//tax
+                {
+                    String[] options = {"ok"}; //// setting for buying a property
+                        JOptionPane.showOptionDialog(null, "Tax area pay 100", "Click a button",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        players[currentplayer].decrementBalance(100);
+                        up_data();
+                }
+                else if(players[currentplayer].getCurrentLocation() ==2||players[currentplayer].getCurrentLocation() ==7
+                        ||players[currentplayer].getCurrentLocation() ==17||players[currentplayer].getCurrentLocation() ==22
+                        ||players[currentplayer].getCurrentLocation() ==33||players[currentplayer].getCurrentLocation() ==36)//Lucky chances
+                {
+                    lucky();
+                }
 
-                if (players[currentplayer].getCurrentLocation() == 30)// jail
+                else if (players[currentplayer].getCurrentLocation() == 30)// jail
                 {
                     players[currentplayer].setIsJail(true);
                     for (int i = 29; i >= 10; i--) {
@@ -138,9 +188,15 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         label[players[currentplayer].getCurrentLocation()].add(movingplayers[currentplayer]);
                         label[players[currentplayer].getCurrentLocation()].repaint();
                     }
+                    if(!players[currentplayer].getJailCard())
+                    {
                     rolldice.setEnabled(false);
                     endturn.setEnabled(true);
-                } else {
+                    }
+                    else
+                        players[currentplayer].setIsJail(false);
+                }
+                else {
                     buyingproperty();
                 }
             }
@@ -151,11 +207,6 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
     public void buyingproperty() {
         int currentlocation = players[currentplayer].getCurrentLocation();
         int propertylocation = 0;
-//        for(int i=0;i<property.length;i++)
-//        {
-//            if(currentlocation==((Property)property[i]).getID())
-//                propertylocation=i;
-//        }
 
         if (currentlocation == 0 || currentlocation == 2 || currentlocation == 4 || currentlocation == 7 || currentlocation == 10
                 || currentlocation == 17 || currentlocation == 20 || currentlocation == 22 || currentlocation == 30
@@ -164,7 +215,6 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         }
         for (int i = 0; i < property.length; i++) {
             if (((Property) property[i]).getID() == currentlocation) {
-//                c = ((Property) property[i]);
                 propertylocation = i;
             }
         }
@@ -340,7 +390,7 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         i++;
                     }
                     movingplayer(ran1 + ran2);
-//                    movingplayer(12);
+//                    movingplayer(30);
                     counterfordice++;
 
                     if (ran1 != ran2 || counterfordice > 2) {
@@ -356,6 +406,7 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         if (me.getSource() == endturn) {
             Thread t = new Thread() {
                 public void run() {
+//                    currentplayer=0;
                     currentplayer = (currentplayer + 1) % 4;
                     downdata();
                     if (players[currentplayer].getIsJail()) {
@@ -723,7 +774,7 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         //Adding to centre
         imageicon[40] = new ImageIcon("src//images//centre.PNG");
         image = imageicon[40].getImage();
-        newimg = image.getScaledInstance(870, 735, java.awt.Image.SCALE_SMOOTH);
+        newimg = image.getScaledInstance(812, 602, java.awt.Image.SCALE_SMOOTH);
         imageicon[40] = new ImageIcon(newimg);
         label[40] = new JLabel();
         label[40].setIcon(imageicon[40]);
