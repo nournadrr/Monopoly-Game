@@ -79,120 +79,7 @@ public class Game implements Serializable{
 //        else
 //            System.out.println("u can only build in a city");
     }
-    
-//<<<<<<< board
-    public static void rolling()
-    {
-        
-    }
-    
-    public static  void roll_Dice(Player [] p,Object [] c,int dice,int counter, int i){
-//=======
-  //  public static  void roll_Dice(Object [] c,int dice,int counter, int i){
-//>>>>>>> master
-        Scanner sc=new Scanner(System.in);
 
-        Taxes[] ta=new Taxes[2];
-        ta[0]=new Taxes(4,"INCOME TAX",200);
-        ta[1]=new Taxes(38,"LUXURY TAX",150);
-                        
-        if(p[i].getIsPlaying()==false)
-        {
-            return;
-        }
-        boolean isit=false;
-        //int counter=0;
-        do{             
-            counter++;
-           dice =(int)(Math.random()*11+2);
-           if(p[i].getIsJail())
-           {
-               p[i].incrementjailtime();
-               continue;
-           }
-            System.out.println("your dice is: "+dice);
-           p[i].incrementCurrentLocation(dice);
-           for(int j=0;j<c.length;j++)  //Properties
-           {
-               if(p[i].getCurrentLocation()==((Property)c[j]).getID())
-               {
-                   System.out.println("you are now standing on : "+((Property)c[j]).getName());
-                   isit=true;
-                   if(((Property)c[j]).Isbought())
-                   {
-                       int rentprice;
-                       if(j==26||j==27) 
-                       {
-                           rentprice=((waterandelec)c[j]).getRent(dice,c);
-                           System.out.println("Please pay : "+rentprice);
-                           p[i].decrementBalance(rentprice);
-
-                       }
-                       else if(j==22||j==23||j==24||j==25)
-                       {
-                           rentprice=((Train)c[j]).getRent(c,((Property)c[j]).getOwnerid());
-                           System.out.println("Please pay : "+rentprice);
-                           p[i].decrementBalance(rentprice);
-                       }
-
-                       else 
-                       {
-                           rentprice=((Property)c[j]).getRent();
-                           System.out.println("Please pay : "+rentprice);
-                           p[i].decrementBalance(rentprice);
-
-                       }
-                       if(!((Property)c[j]).isIsmortaged())
-                       {
-                           p[((Property)c[j]).getOwnerid()].incrementBalance(rentprice);
-                       }
-
-                   }
-                   else
-                   {
-                       System.out.println("do u wanna buy enter yes for yes and no for no\n");
-                       String buuuyy=sc.next();
-                       if(p[i].getBalance()>((Property)c[j]).getPrice()&&buuuyy.equalsIgnoreCase("yes"))
-                       {
-                           p[i].decrementBalance(((Property)c[j]).getPrice());
-                           ((Property)c[j]).setOwnerid(i);
-//                           p[i].addProperties(c[j]);
-                       }
-                   }
-               }
-           }
-
-
-           if(isit!=true) //Chances
-           {
-               if(p[i].getCurrentLocation()==2||p[i].getCurrentLocation()==7
-                       ||p[i].getCurrentLocation()==17||p[i].getCurrentLocation()==22||
-                       p[i].getCurrentLocation()==33||p[i].getCurrentLocation()==36)
-               {
-                   System.out.print("u are in a chance field : ");
-                   int choice=(int)(Math.random()*3+1);
-                   Chances.todo(choice, p[i]);
-               }
-
-
-               if(p[i].getCurrentLocation()==ta[0].getId()) //taxes
-
-               {
-                   System.out.println("you are now standing on : "+ta[0].getName());
-                   System.out.println("Pay : "+ta[0].getPayment());
-                   p[i].decrementBalance(ta[0].getPayment());
-               }
-               else if(p[i].getCurrentLocation()==ta[1].getPayment())
-               {
-                   System.out.println("you are now standing on : "+ta[1].getName());
-                   System.out.println("Pay : "+ta[1].getPayment());
-                   p[i].decrementBalance(ta[1].getPayment());
-               }
-           }
-            System.out.println(" \n current balance is "+p[i].getBalance());
-       }while((dice==12&&counter<=3));
-        
-    }
     
     
     public static void savePlayer(Player[] p) throws FileNotFoundException, IOException
@@ -324,7 +211,7 @@ public class Game implements Serializable{
     }
     
     
-    public static void saveAndExit(String name) throws FileNotFoundException, IOException, ClassNotFoundException
+    public static void saveAndExit(String name,Object[] property) throws FileNotFoundException, IOException, ClassNotFoundException
     {
         String fileplayer="files\\"+name+"players.bin";
         String fileproperties="files\\"+name+"properties.bin";
@@ -332,7 +219,8 @@ public class Game implements Serializable{
         ObjectOutputStream out1 = new ObjectOutputStream(new FileOutputStream(fileplayer));
         out1.writeObject(p);
         out1.close();
-        c=loadProperty(c);
+        //c=loadProperty(c);
+        c=property;
         ObjectOutputStream out2 = new ObjectOutputStream(new FileOutputStream(fileproperties));
         out2.writeObject(c);
         out2.close();

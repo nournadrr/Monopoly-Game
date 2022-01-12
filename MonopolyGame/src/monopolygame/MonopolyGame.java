@@ -74,7 +74,7 @@ public class MonopolyGame {
         
         
         
-        
+//        
 //        Player[] p=new Player[4];
 //        p[0]=new Player();
 //        p[0].setName("Abdelrahman");
@@ -102,7 +102,7 @@ public class MonopolyGame {
 //            ((Property)a[i]).setOwnerid(-1);
         
         
-//        new board(p,a);
+//        new board(p,a,"");
         
 //<<<<<<< board
          
