@@ -107,7 +107,7 @@ public class Cities extends Property {
 
     public int rent() {
 
-        System.out.println(housecounter);
+//        System.out.println(housecounter);
         switch (housecounter) {
             case 0:
                 System.out.println("0");

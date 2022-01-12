@@ -90,7 +90,9 @@ public class MonopolyGame {
         p[3].setId(4);
         Object[] a=null;
         a=Game.loadProperty(a);
-        
+//        p[1].decrementBalance(1498);
+        p[2].decrementBalance(1498);
+//        p[3].decrementBalance(1498);
         ((Property)a[2]).setOwnerid(0);
         ((Property)a[3]).setOwnerid(0);
         ((Property)a[4]).setOwnerid(0);
