@@ -447,7 +447,7 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         if (me.getSource() == rolldice) {
             Thread t = new Thread() {
                 public void run() {
-//                    rolldice.setEnabled(false);
+                    rolldice.setEnabled(false);
                     int ran1 = 0, ran2 = 0;
                     int i;
                     i = 0;
