@@ -472,8 +472,8 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
                         dice2label.setIcon(dice2imageicon);
                         i++;
                     }
-//                    movingplayer(ran1 + ran2);
-                    movingplayer(30);
+                    movingplayer(ran1 + ran2);
+//                    movingplayer(30);
                     counterfordice++;
 
                     if (ran1 != ran2 || counterfordice > 2) {

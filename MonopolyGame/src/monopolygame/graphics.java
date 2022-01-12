@@ -5,12 +5,15 @@
  */
 package monopolygame;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -30,55 +33,75 @@ import javax.swing.*;
  * @author Dell
  */
 public class graphics extends JFrame implements ActionListener {
-    private JButton newgame,loadgame;
+    private JButton newgame,loadgame,statistics;
+
+    
     //newgame n=new newgame();
     //loadgame load=new loadgame();
     
     public graphics()
     {
-        setVisible(true);
-//        //ImageIO.read(new File("I:\\oop\\img"));
+        
         setSize(900,900);
+        setLayout(new BorderLayout());
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-//        
-//
-//        JPanel p1=new JPanel();
-//        JLabel label1=new JLabel();
-//        ImageIcon image=new ImageIcon("I:\\oop\\IMG_7689.PNG");
-//        Image img = image.getImage();
-//        Image img2 = img.getScaledInstance(900, 900, java.awt.Image.SCALE_SMOOTH);
-//        image=new ImageIcon(img2);
-//        label1.setIcon(image);
-//        p1.add(label1);
-//        add(p1,BorderLayout.NORTH);
+        Image image,newimg;
+        ImageIcon imageicon=new ImageIcon("src\\images\\theme.jpeg");
+        image=imageicon.getImage();
+        newimg=image.getScaledInstance(900, 900, java.awt.Image.SCALE_SMOOTH);
+        imageicon=new ImageIcon(newimg);
+        JLabel label=new JLabel(imageicon);
+        setContentPane(label);
+        
+        
+        JPanel title=new JPanel(new FlowLayout());
+        
+        JLabel name=new JLabel("MONOPOLY");
+        name.setFont(new Font("Lucida Calligraphy", Font.BOLD+Font.ITALIC, 100));
+        title.add(name);
+        title.setLocation(30,220);
+        title.setSize(820,390);
+//        title.setBackground(null):
+        title.setOpaque(false);
+        add(title,BorderLayout.NORTH);
         
 
 
-    }
-    
-    public void paint(Graphics g)
-    {
-        super.paint(g);
-//        Font myFont = new Font ("Courier New", 1, 17);
-//        g.setFont (myFont);
-//        g.drawString ("Hello World", 10, 10);
-//        g.setColor(Color.black);
-//        g.fillRect(0, 0, 700, 700);
-        
-        //g.drawImage(img, 0, 0, null);
-        //setLayout(new BorderLayout());
-        //JLabel label=new JLabel(image);
-        //add(label,BorderLayout.CENTER);
         JPanel p=new JPanel();
-        p.setLayout(new BorderLayout());
+        p.setLayout(new GridLayout(0,1));
         newgame=new JButton("new game");
-        p.add(newgame,BorderLayout.WEST);
+        p.add(newgame,BorderLayout.NORTH);
         loadgame=new JButton("load game");
-        p.add(loadgame,BorderLayout.EAST);
-        add(p,BorderLayout.SOUTH);
+        p.add(loadgame,BorderLayout.CENTER);
+        statistics=new JButton("statistics");
+        p.add(statistics,BorderLayout.SOUTH);
+        p.setSize(240, 260);
+        p.setLocation(320,900/2+1);
+        p.setBackground(Color.BLACK);
+        p.setOpaque(true);
+//        name.setLocation(p.getX()+200,p.getY()-100);
+//        label.add(p);
+        add(p,BorderLayout.CENTER);
+        
+        
+        
+        
         newgame.addActionListener(this);
         loadgame.addActionListener(this);
+        statistics.addActionListener(this);
+
+//        add(label);
+        pack();
+        setVisible(true);
     }
+    
+//    public void paint(Graphics g)
+//    {
+//        super.paint(g);
+//        
+//    }
+    
 
     @Override
     public void actionPerformed(ActionEvent ae) {
@@ -93,6 +116,12 @@ public class graphics extends JFrame implements ActionListener {
         {
             setVisible(false);
             MonopolyGame.l.setVisible(true);
+        }
+        if(ae.getSource()==statistics)
+        {
+            setVisible(false);
+            int[] dice={50,62,23,37,111,67};
+            chart c=new chart(dice);
         }
     }
 }
