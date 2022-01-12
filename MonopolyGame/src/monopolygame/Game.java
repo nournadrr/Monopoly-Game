@@ -211,7 +211,7 @@ public class Game implements Serializable{
     }
     
     
-    public static void saveAndExit(String name) throws FileNotFoundException, IOException, ClassNotFoundException
+    public static void saveAndExit(String name,Object[] property) throws FileNotFoundException, IOException, ClassNotFoundException
     {
         String fileplayer="files\\"+name+"players.bin";
         String fileproperties="files\\"+name+"properties.bin";
@@ -219,7 +219,8 @@ public class Game implements Serializable{
         ObjectOutputStream out1 = new ObjectOutputStream(new FileOutputStream(fileplayer));
         out1.writeObject(p);
         out1.close();
-        c=loadProperty(c);
+        //c=loadProperty(c);
+        c=property;
         ObjectOutputStream out2 = new ObjectOutputStream(new FileOutputStream(fileproperties));
         out2.writeObject(c);
         out2.close();

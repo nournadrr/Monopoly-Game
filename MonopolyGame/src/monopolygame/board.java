@@ -1087,8 +1087,10 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
         // Button pressed logic goes here
 //        Stem.out.println("save and exit pressed");
         try {
-            Game.saveAndExit(filename);
+            Game.saveAndExit(filename,property);
             setVisible(false);
+            System.exit(0);
+//            dispose();
         } catch (IOException ex) {
             Logger.getLogger(board.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -1117,9 +1119,30 @@ public class board extends JFrame implements KeyListener, MouseListener, ActionL
 
     public void actionPerformed(ActionEvent e) {
         // Button pressed logic goes here
-//        tem.out.println("technical pressed");
-        setVisible(false);
-        
+        System.out.println("technical pressed");
+        chatServer server=null;
+        try {
+            server = new chatServer(6969);
+        } catch (IOException ex) {
+            Logger.getLogger(board.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        server.start();
+        Client client1=null;
+        try {
+            client1 = new Client(6969, "tech");
+        } catch (IOException ex) {
+            Logger.getLogger(board.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Client client2=null;
+        try {
+            client2 = new Client(6969, "player");
+        } catch (IOException ex) {
+            Logger.getLogger(board.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Thread t1 = new Thread(client1);
+        Thread t2 = new Thread(client2);
+        t1.start();
+        t2.start();
     }
     }
 }

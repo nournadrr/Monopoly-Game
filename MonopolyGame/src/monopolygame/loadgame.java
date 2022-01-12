@@ -6,13 +6,17 @@
 package monopolygame;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -32,23 +36,42 @@ public class loadgame extends JFrame implements ActionListener{
     
     public loadgame()
     {
-        JPanel p1=new JPanel();
-        setSize(550,850);
+        setSize(900,900);
+        setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //setVisible(true);
+        Image image,newimg;
+        ImageIcon imageicon=new ImageIcon("src\\images\\theme.jpeg");
+        image=imageicon.getImage();
+        newimg=image.getScaledInstance(900, 900, java.awt.Image.SCALE_SMOOTH);
+        imageicon=new ImageIcon(newimg);
+        JLabel x=new JLabel(imageicon);
+        setContentPane(x);
+        
+        
+        JPanel p1=new JPanel();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         p1.setLayout(new FlowLayout(FlowLayout.LEFT,10, 30));
         JLabel label=new JLabel("                                           Load existing Game                                                             ");
         JLabel L1=new JLabel("choose game name: ");
+        L1.setFont(new Font("Lucida Calligraphy", Font.BOLD, 22));
         //t1=new JTextField(10);
-        p1.add(label);
+//        p1.add(label);
         p1.add(L1);
+        p1.setSize(400, 400);
+        p1.setLocation(250,400);
+        p1.setOpaque(false);
         //p1.add(t1);
         add(p1,BorderLayout.CENTER);
         JPanel p2=new JPanel();
-        save=new JButton("save");
+        save=new JButton("Go");
         back=new JButton("back");
         p2.add(save,BorderLayout.WEST);
         p2.add(back,BorderLayout.EAST);
+        
+        p2.setSize(400, 400);
+        p2.setLocation(200,600);
+        p2.setOpaque(false);
+        
         add(p2,BorderLayout.SOUTH);
         back.addActionListener(this);
         save.addActionListener(this);
